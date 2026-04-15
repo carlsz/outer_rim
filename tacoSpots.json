@@ -1,0 +1,90 @@
+[
+  {
+    "id": "kessel-run-express",
+    "name": "Taqueria Santa Cruz Express",
+    "swAlias": "The Kessel Run Express",
+    "address": "1308 Monterey St, San Luis Obispo, CA 93401",
+    "lat": 35.28625,
+    "lng": -120.65584,
+    "spiceRating": 4,
+    "tagline": "Made the Monterey run in under 12 parsecs.",
+    "clueHint": "express, Monterey street, fast service, hot salsa"
+  },
+  {
+    "id": "mandalorian-al-pastor-den",
+    "name": "Taco De Mexico",
+    "swAlias": "Mandalorian Al Pastor Den",
+    "address": "374 Santa Rosa St, San Luis Obispo, CA 93405",
+    "lat": 35.28479,
+    "lng": -120.66442,
+    "spiceRating": 3,
+    "tagline": "This is the way (to eat al pastor and veggie burritos).",
+    "clueHint": "al pastor, veggie burrito, authentic"
+  },
+  {
+    "id": "nar-shaddaa-street-food",
+    "name": "Taqueria El Guero",
+    "swAlias": "Nar Shaddaa Street Food",
+    "address": "1122 Chorro St, San Luis Obispo, CA 93401",
+    "lat": 35.28096,
+    "lng": -120.66224,
+    "spiceRating": 4,
+    "tagline": "Handmade tortillas. Salsas with an excellent kick.",
+    "clueHint": "handmade tortillas, great salsas, kick"
+  },
+  {
+    "id": "mos-eisley-street-stand",
+    "name": "San Luis Taqueria",
+    "swAlias": "Mos Eisley Street Stand",
+    "address": "1032 Chorro St, San Luis Obispo, CA 93401",
+    "lat": 35.27989,
+    "lng": -120.66352,
+    "spiceRating": 3,
+    "tagline": "Classic street-style. No questions asked.",
+    "clueHint": "outdoor patio, funky little place, street tacos"
+  },
+  {
+    "id": "docking-bay-94",
+    "name": "La Esquina Taqueria",
+    "swAlias": "Docking Bay 94",
+    "address": "1049 Nipomo St, San Luis Obispo, CA 93401",
+    "lat": 35.27901,
+    "lng": -120.66532,
+    "spiceRating": 4,
+    "tagline": "Best al pastor in the outer rim. No questions asked.",
+    "clueHint": "corner spot, al pastor, amazing drinks, bars"
+  },
+  {
+    "id": "acapulco-sector-outpost",
+    "name": "Tacos De Acapulco",
+    "swAlias": "Acapulco Sector Outpost",
+    "address": "596 California Blvd, San Luis Obispo, CA 93405",
+    "lat": 35.28114,
+    "lng": -120.67232,
+    "spiceRating": 5,
+    "tagline": "Huge. $3 each. One does not simply choose just one.",
+    "clueHint": "huge tacos, $3, best in SLO"
+  },
+  {
+    "id": "emperors-commissary",
+    "name": "Taco King",
+    "swAlias": "Emperor's Commissary",
+    "address": "158 Higuera St, San Luis Obispo, CA 93401",
+    "lat": 35.26715,
+    "lng": -120.67389,
+    "spiceRating": 3,
+    "tagline": "Clean. Reasonably priced. Resistance is futile.",
+    "clueHint": "clean, best tacos in SLO, reasonably priced"
+  },
+  {
+    "id": "the-force-wok",
+    "name": "Todo Bueno",
+    "swAlias": "The Force Wok",
+    "address": "3845 S Higuera St #220, San Luis Obispo, CA 93401",
+    "lat": 35.24861,
+    "lng": -120.67332,
+    "spiceRating": 3,
+    "tagline": "125,000 BTU. The Force runs hot here.",
+    "clueHint": "wok, SLO Public Market, Mexican flavors seared"
+  }
+]
