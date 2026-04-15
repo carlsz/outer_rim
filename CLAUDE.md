@@ -1,15 +1,30 @@
-# Outer Rim // Cantina Crawler
+# Outer Rim // Taco Hunt
 
-Star Wars-themed pub crawl app for San Luis Obispo. Live demo: Cal Poly SLO, May 5, 2026.
+Star Wars-themed taco scavenger hunt app for San Luis Obispo. Live demo: Cal Poly SLO, May 5, 2026.
 
 ## Stack
 
 - Next.js App Router + TypeScript + Tailwind CSS
 - Google Maps JavaScript API (dark style)
-- Cloud Firestore (cantinas, routes, checkpoints)
-- satori (Node runtime) for OG image generation
+- Cloud Firestore (tacoSpots, hunts)
+- satori (Node runtime) for trail card OG image generation
 - GitHub Actions → Artifact Registry → Cloud Run (min-instances=1)
-- Claude API (Anthropic SDK) for menu normalizer
+- Claude API (Anthropic SDK) for clue generator
+
+## Dev Setup
+
+```bash
+cp .env.local.example .env.local   # fill in all values (see below)
+npm install
+npm run seed    # seed Firestore with tacoSpots.json — requires FIREBASE_ADMIN_CREDENTIAL
+npm run dev     # http://localhost:3000
+```
+
+**Required env vars** (see `.env.local.example`):
+- `NEXT_PUBLIC_FIREBASE_*` — Firebase client config
+- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
+- `FIREBASE_ADMIN_CREDENTIAL` — base64-encoded service account JSON (seed script + admin trigger)
+- `ANTHROPIC_API_KEY` — clue generator
 
 ## Design Doc
 

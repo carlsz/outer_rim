@@ -1,18 +1,33 @@
-# OUTER RIM // CANTINA CRAWLER
+# OUTER RIM // TACO HUNT
 Target Build Date: May 5, 2026 (Revenge of the 5th)<br/>
-Status: Social Utility / Route Orchestrator
+Status: Taco Scavenger Hunt App
 
 ## Vision
-The definitive guide for the scoundrel-about-town. This app allows users to review drink menus at various Outer Rim cantinas, track "Species-Safe" beverage ratings, and orchestrate optimal pub crawl routes through Mos Eisley while avoiding Imperial checkpoints.
+Hunt down the best tacos in San Luis Obispo — each stop disguised as a Star Wars cantina. Scan a QR code to unlock your next clue, collect all stops, and earn a shareable trail card proving you made the Kessel Run of SLO taco joints.
 
 ## Technical Stack
 + Framework: React/Next.js (Tailwind CSS)
-+ Data Source: cantinas.json (The "Wretched Hive" Registry) 
++ Data Source: tacoSpots.json (real SLO taco spots with Star Wars aliases)
 + Orchestration Layer: gstack / Claude Code
-+ Verification Logic: Approval Interfaces for "Buying a Round" and "Locked Routes."
++ Verification Logic: Token-gated Navigator Unlock for revealing the next stop
 + Deployment: Cloud Run
 
 ## Core Demo Loops
-+ The Menu Normalizer: AI converts messy, multi-currency price lists (Credits, Peggats, Wupiupi) into a standard Credit-based view.
-+ The Social Handoff: Mapping blueprint design tokens to a "Crawl Card" that can be shared with droids.
-+ The Checkpoint Guard: Human-in-the-loop verification for route adjustments when "Imperial Activity" is detected.
++ The Clue Generator: Claude writes a riddle-style clue for each taco stop based on its hint keywords, revealed when the previous stop is unlocked.
++ The Trail Card: satori renders a shareable OG image listing completed stops — the proof you survived the outer rim.
++ The Navigator Unlock: Human-in-the-loop approval via a token-gated URL to reveal the next stop on the map.
+
+## Dev Setup
+
+```bash
+cp .env.local.example .env.local   # fill in all values
+npm install
+npm run seed    # seed Firestore with tacoSpots.json — requires FIREBASE_ADMIN_CREDENTIAL
+npm run dev     # http://localhost:3000
+```
+
+**Required env vars** (see `.env.local.example`):
+- `NEXT_PUBLIC_FIREBASE_*` — Firebase client config
+- `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
+- `FIREBASE_ADMIN_CREDENTIAL` — base64-encoded service account JSON (seed script + admin trigger)
+- `ANTHROPIC_API_KEY` — clue generator
