@@ -2,6 +2,8 @@
 
 Star Wars-themed taco scavenger hunt app for San Luis Obispo. Live demo: Cal Poly SLO, May 5, 2026.
 
+Domain: slotacohunt.com
+
 ## Stack
 
 - Next.js App Router + TypeScript + Tailwind CSS

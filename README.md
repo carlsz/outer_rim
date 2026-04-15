@@ -1,6 +1,7 @@
 # OUTER RIM // TACO HUNT
 Target Build Date: May 5, 2026 (Revenge of the 5th)<br/>
-Status: Taco Scavenger Hunt App
+Status: Taco Scavenger Hunt App<br/>
+Domain: [slotacohunt.com](https://slotacohunt.com)
 
 ## Vision
 Hunt down the best tacos in San Luis Obispo — each stop disguised as a Star Wars cantina. Scan a QR code to unlock your next clue, collect all stops, and earn a shareable trail card proving you made the Kessel Run of SLO taco joints.
