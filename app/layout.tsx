@@ -1,12 +1,17 @@
-import type { Metadata } from "next";
-import { Space_Grotesk } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600"],
 });
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
 
 export const metadata: Metadata = {
   title: "Outer Rim // Taco Hunt",
@@ -19,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${spaceGrotesk.variable} h-full`}>
-      <body className="min-h-full flex flex-col antialiased bg-[#0a0a0f] text-[#e8e8e8]">
+    <html lang="en" className={`${dmSans.variable} h-full`}>
+      <body className="min-h-full flex flex-col antialiased bg-background text-foreground">
         {children}
       </body>
     </html>

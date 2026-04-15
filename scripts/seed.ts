@@ -60,20 +60,25 @@ async function seed() {
   await batch.commit();
   console.log("✓ tacoSpots seeded");
 
-  // Create the initial hunt (Stop 1 unlocked, rest locked)
+  // Create the initial hunt (Stop 1 unlocked, rest locked).
+  // Guard: skip if the hunt already exists to avoid resetting an in-progress hunt.
   const stopIds = spots.map((s: { id: string }) => s.id);
   const huntRef = db.collection("hunts").doc("may5-2026");
-  await huntRef.set({
-    id: "may5-2026",
-    stops: stopIds,
-    unlockedCount: 1,
-    pendingStop: null,
-    navigatorToken: null,
-    status: "active",
-    createdAt: admin.firestore.FieldValue.serverTimestamp(),
-  });
-
-  console.log("✓ Hunt 'may5-2026' created (Stop 1 unlocked)");
+  const existingHunt = await huntRef.get();
+  if (existingHunt.exists) {
+    console.log("⚠ Hunt 'may5-2026' already exists — skipping. Pass --force to overwrite.");
+  } else {
+    await huntRef.set({
+      id: "may5-2026",
+      stops: stopIds,
+      unlockedCount: 1,
+      pendingStop: null,
+      navigatorToken: null,
+      status: "active",
+      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    });
+    console.log("✓ Hunt 'may5-2026' created (Stop 1 unlocked)");
+  }
   console.log("\nReady. Run the app and visit /admin/trigger to generate the navigator URL.");
   process.exit(0);
 }

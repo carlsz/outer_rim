@@ -1,0 +1,1613 @@
+<!DOCTYPE html>
+<!-- saved from url=(0060)file:///private/tmp/outer-rim-design-preview-1776224917.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Outer Rim // Design System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+<link href="./Outer Rim __ Design System_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0b0d;
+    --surface: #12151a;
+    --surface-elevated: #1c2028;
+    --surface-hover: #222833;
+    --text: #e8dfc8;
+    --text-muted: #6b7280;
+    --text-dim: #3d4148;
+    --accent-gold: #c9a84c;
+    --accent-gold-dim: rgba(201,168,76,0.15);
+    --accent-gold-glow: rgba(201,168,76,0.25);
+    --accent-cyan: #4db8c8;
+    --accent-cyan-dim: rgba(77,184,200,0.15);
+    --accent-cyan-glow: rgba(77,184,200,0.3);
+    --success: #4ade80;
+    --success-dim: rgba(74,222,128,0.12);
+    --border: rgba(232,223,200,0.08);
+    --border-strong: rgba(232,223,200,0.16);
+    --scanline: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.06) 2px,
+      rgba(0,0,0,0.06) 4px
+    );
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', system-ui, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* Scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: var(--scanline);
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  .section {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 40px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section:last-child { border-bottom: none; }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-cyan);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 40px;
+  }
+
+  /* ─── HEADER ─────────────────────────────────────── */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 100%;
+    background-image: var(--scanline);
+  }
+
+  .header-logo {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .logo-text {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--accent-gold);
+    letter-spacing: 0.04em;
+  }
+
+  .logo-slash {
+    color: var(--text-muted);
+    font-weight: 300;
+  }
+
+  .logo-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .header-status {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-cyan);
+    letter-spacing: 0.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 6px var(--success);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ─── SYSTEM INTRO ───────────────────────────────── */
+  .intro {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 40px 0;
+  }
+
+  .intro-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-gold);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .intro-headline {
+    font-family: 'Fraunces', serif;
+    font-size: 64px;
+    font-weight: 700;
+    line-height: 1.0;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .intro-headline em {
+    font-style: italic;
+    color: var(--accent-gold);
+  }
+
+  .intro-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    color: var(--text-muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+
+  /* ─── COLORS ─────────────────────────────────────── */
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  .swatch {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .swatch-color {
+    height: 80px;
+    position: relative;
+  }
+
+  .swatch-info {
+    padding: 10px 12px;
+    background: var(--surface);
+  }
+
+  .swatch-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .swatch-hex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ─── TYPOGRAPHY ─────────────────────────────────── */
+  .type-specimen {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .type-row {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 28px 32px;
+    background: var(--surface);
+    position: relative;
+  }
+
+  .type-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .type-meta span {
+    background: var(--surface-elevated);
+    padding: 3px 8px;
+    border-radius: 3px;
+    border: 1px solid var(--border);
+  }
+
+  .specimen-display {
+    font-family: 'Fraunces', serif;
+    font-size: 52px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.05;
+  }
+
+  .specimen-display em {
+    font-style: italic;
+    color: var(--accent-gold);
+    font-weight: 400;
+  }
+
+  .specimen-ui {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .specimen-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: var(--text-muted);
+    line-height: 1.7;
+    max-width: 520px;
+  }
+
+  .specimen-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--accent-cyan);
+    line-height: 1.8;
+    background: rgba(77,184,200,0.04);
+    padding: 20px 24px;
+    border-radius: 4px;
+    border-left: 2px solid var(--accent-cyan);
+    margin-top: 8px;
+  }
+
+  .mono-prompt {
+    color: var(--accent-gold);
+    font-weight: 500;
+  }
+
+  /* ─── UI COMPONENTS ──────────────────────────────── */
+  .components-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .component-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+  }
+
+  .component-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* Buttons */
+  .btn-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--accent-gold);
+    color: #0a0b0d;
+  }
+
+  .btn-primary:hover {
+    background: #d9b85c;
+    box-shadow: 0 0 20px var(--accent-gold-glow);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--accent-cyan);
+    border: 1px solid var(--accent-cyan);
+  }
+
+  .btn-secondary:hover {
+    background: var(--accent-cyan-dim);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--border-strong);
+  }
+
+  .btn-ghost:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+    background: var(--surface-elevated);
+  }
+
+  .btn-scan {
+    background: var(--accent-gold);
+    color: #0a0b0d;
+    font-size: 15px;
+    padding: 14px 28px;
+    width: 100%;
+    justify-content: center;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    box-shadow: 0 0 24px rgba(201,168,76,0.2);
+  }
+
+  /* Cards */
+  .stop-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .stop-card {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    background: var(--surface-elevated);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .stop-card.active {
+    border-color: var(--accent-cyan);
+    background: var(--accent-cyan-dim);
+    box-shadow: 0 0 16px rgba(77,184,200,0.08);
+  }
+
+  .stop-card.completed {
+    border-color: rgba(201,168,76,0.3);
+    opacity: 0.75;
+  }
+
+  .stop-card.locked {
+    opacity: 0.4;
+  }
+
+  .stop-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    width: 20px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .stop-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .stop-alias {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .stop-real {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .stop-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 3px 8px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .badge-completed {
+    background: rgba(201,168,76,0.12);
+    color: var(--accent-gold);
+    border: 1px solid rgba(201,168,76,0.2);
+  }
+
+  .badge-active {
+    background: rgba(77,184,200,0.15);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(77,184,200,0.3);
+  }
+
+  .badge-locked {
+    background: rgba(107,114,128,0.1);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  /* Form inputs */
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  .form-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  .form-input {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-strong);
+    border-radius: 4px;
+    padding: 11px 14px;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+
+  .form-input:focus {
+    border-color: var(--accent-cyan);
+    box-shadow: 0 0 0 3px rgba(77,184,200,0.1);
+  }
+
+  .form-input::placeholder {
+    color: var(--text-dim);
+  }
+
+  /* Alerts */
+  .alert {
+    border-radius: 4px;
+    padding: 12px 16px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+    border-left: 3px solid;
+  }
+
+  .alert-icon {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .alert-success {
+    background: var(--success-dim);
+    border-color: var(--success);
+    color: var(--success);
+  }
+
+  .alert-warning {
+    background: rgba(251,191,36,0.08);
+    border-color: #fbbf24;
+    color: #fbbf24;
+  }
+
+  .alert-error {
+    background: rgba(239,68,68,0.08);
+    border-color: #ef4444;
+    color: #ef4444;
+  }
+
+  .alert-info {
+    background: var(--accent-cyan-dim);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+  }
+
+  /* ─── FULL SCREEN MOCKUPS ────────────────────────── */
+  .mockups-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 32px;
+    align-items: start;
+  }
+
+  .phone-frame {
+    background: var(--surface);
+    border: 1px solid var(--border-strong);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+    position: relative;
+  }
+
+  .phone-notch {
+    background: var(--bg);
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .notch-dot {
+    width: 8px;
+    height: 8px;
+    background: #1a1f28;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+  }
+
+  .phone-content {
+    padding: 0;
+  }
+
+  /* Mock map */
+  .mock-map {
+    height: 220px;
+    background: #0d1117;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mock-map-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(77,184,200,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(77,184,200,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  .mock-map-road {
+    position: absolute;
+    background: rgba(255,255,255,0.04);
+    border-radius: 2px;
+  }
+
+  .map-pin {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transform: translate(-50%, -50%);
+  }
+
+  .pin-completed {
+    background: rgba(201,168,76,0.2);
+    border-color: var(--accent-gold);
+    color: var(--accent-gold);
+    box-shadow: 0 0 8px rgba(201,168,76,0.3);
+  }
+
+  .pin-active {
+    background: rgba(77,184,200,0.2);
+    border-color: var(--accent-cyan);
+    color: var(--accent-cyan);
+    box-shadow: 0 0 16px rgba(77,184,200,0.5);
+    animation: pinPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pinPulse {
+    0%, 100% { box-shadow: 0 0 12px rgba(77,184,200,0.5); }
+    50% { box-shadow: 0 0 24px rgba(77,184,200,0.8); }
+  }
+
+  .pin-locked {
+    background: rgba(61,65,72,0.3);
+    border-color: var(--text-dim);
+    color: var(--text-dim);
+  }
+
+  .map-user {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: var(--accent-gold);
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 12px var(--accent-gold);
+    transform: translate(-50%, -50%);
+  }
+
+  .map-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(transparent, var(--surface));
+  }
+
+  /* Map label */
+  .map-label {
+    position: absolute;
+    background: rgba(12,15,20,0.9);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 3px 7px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  /* Mission screen internals */
+  .phone-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .phone-header-title {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .phone-progress {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent-gold);
+  }
+
+  .phone-stop-list {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .phone-stop {
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface-elevated);
+  }
+
+  .phone-stop.s-active {
+    border-color: var(--accent-cyan);
+    background: rgba(77,184,200,0.06);
+  }
+
+  .phone-stop.s-done {
+    border-color: rgba(201,168,76,0.2);
+    opacity: 0.7;
+  }
+
+  .phone-stop.s-locked {
+    opacity: 0.35;
+  }
+
+  .phone-stop-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    width: 14px;
+  }
+
+  .phone-stop-name {
+    flex: 1;
+    font-family: 'Fraunces', serif;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .phone-stop-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+
+  .phone-scan-cta {
+    margin: 8px 12px 12px;
+    background: var(--accent-gold);
+    color: #0a0b0d;
+    border: none;
+    border-radius: 4px;
+    padding: 12px;
+    width: calc(100% - 24px);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(201,168,76,0.15);
+  }
+
+  /* Trail card mockup */
+  .trail-card {
+    background: linear-gradient(145deg, #0d1117 0%, #12151a 100%);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 10px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .trail-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--scanline);
+    opacity: 0.5;
+  }
+
+  .trail-card-header {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--accent-gold);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    position: relative;
+  }
+
+  .trail-card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 4px;
+    position: relative;
+  }
+
+  .trail-card-sub {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    position: relative;
+  }
+
+  .trail-card-stops {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 20px;
+  }
+
+  .trail-card-stop {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: var(--text);
+  }
+
+  .trail-card-stop-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-gold);
+    flex-shrink: 0;
+  }
+
+  .trail-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    border-top: 1px solid rgba(201,168,76,0.15);
+    padding-top: 14px;
+  }
+
+  .trail-card-kessel {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-gold);
+    letter-spacing: 0.1em;
+  }
+
+  .trail-card-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    color: var(--text-muted);
+  }
+
+  /* Clue reveal mockup */
+  .clue-screen {
+    padding: 16px;
+  }
+
+  .clue-header {
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .clue-stop-info {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+  }
+
+  .clue-terminal {
+    background: rgba(77,184,200,0.04);
+    border: 1px solid rgba(77,184,200,0.2);
+    border-left: 2px solid var(--accent-cyan);
+    border-radius: 4px;
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  .clue-line {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent-cyan);
+    line-height: 1.7;
+  }
+
+  .clue-cursor {
+    display: inline-block;
+    width: 7px;
+    height: 13px;
+    background: var(--accent-cyan);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+    margin-left: 1px;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  .clue-prompt {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-gold);
+    margin-bottom: 6px;
+  }
+
+  /* ─── SPACING ────────────────────────────────────── */
+  .spacing-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .spacing-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .spacing-bar {
+    background: var(--accent-gold-dim);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 2px;
+    width: 40px;
+  }
+
+  .spacing-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  /* ─── MOTION ─────────────────────────────────────── */
+  .motion-demo {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .motion-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    min-width: 200px;
+  }
+
+  .motion-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent-gold);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .motion-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  .motion-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent-cyan);
+  }
+
+  /* Progress bar */
+  .progress-demo {
+    background: var(--surface-elevated);
+    border-radius: 3px;
+    height: 4px;
+    width: 100%;
+    overflow: hidden;
+    margin-top: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent-gold);
+    border-radius: 3px;
+    width: 60%;
+    box-shadow: 0 0 8px rgba(201,168,76,0.4);
+    transition: width 0.4s ease-out;
+  }
+
+  /* ─── FOOTER ─────────────────────────────────────── */
+  .design-footer {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 40px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 3px;
+  }
+
+  .footer-note {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  /* Divider rule */
+  .rule {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 40px 0;
+  }
+
+  /* Utility */
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .gold { color: var(--accent-gold); }
+  .cyan { color: var(--accent-cyan); }
+  .muted { color: var(--text-muted); }
+
+  @media (max-width: 768px) {
+    .mockups-row { grid-template-columns: 1fr; }
+    .components-grid { grid-template-columns: 1fr; }
+    .intro-headline { font-size: 40px; }
+    .section { padding: 48px 20px; }
+    .section-title { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-logo">
+    <span class="logo-text">OUTER RIM</span>
+    <span class="logo-slash muted">//</span>
+    <span class="logo-sub">TACO HUNT</span>
+  </div>
+  <div class="header-status">
+    <div class="status-dot"></div>
+    DESIGN SYSTEM v0.1
+  </div>
+</header>
+
+<!-- INTRO -->
+<div class="intro">
+  <div class="intro-eyebrow">Design System — April 2026</div>
+  <h1 class="intro-headline">The Outer Rim<br><em>looks like</em><br>the mission.</h1>
+  <p class="intro-body">
+    Every scavenger hunt app looks like a logistics dashboard.
+    Outer Rim looks like a terminal. A mission briefing.
+    Something you'd find on the Millennium Falcon if it had Wi-Fi.
+  </p>
+</div>
+
+<!-- COLORS -->
+<section class="section">
+  <div class="section-label">01 / Color</div>
+  <h2 class="section-title">The Palette</h2>
+
+  <div class="palette-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background:#0a0b0d;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Background</div>
+        <div class="swatch-hex">#0a0b0d</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#12151a;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Surface</div>
+        <div class="swatch-hex">#12151a</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#1c2028;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Surface Elevated</div>
+        <div class="swatch-hex">#1c2028</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#e8dfc8;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Text (Parchment)</div>
+        <div class="swatch-hex">#e8dfc8</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#6b7280;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Text Muted</div>
+        <div class="swatch-hex">#6b7280</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#c9a84c; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Accent Gold</div>
+        <div class="swatch-hex">#c9a84c</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#4db8c8; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Hologram Cyan</div>
+        <div class="swatch-hex">#4db8c8</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#4ade80; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Unlock / Success</div>
+        <div class="swatch-hex">#4ade80</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background:#ef4444; box-shadow: inset 0 0 0 1px rgba(255,255,255,0.1);"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Error / Locked</div>
+        <div class="swatch-hex">#ef4444</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TYPOGRAPHY -->
+<section class="section">
+  <div class="section-label">02 / Typography</div>
+  <h2 class="section-title">Three Voices</h2>
+
+  <div class="type-specimen">
+    <div class="type-row">
+      <div class="type-meta">
+        <span>Fraunces</span>
+        <span>Display / Mission Titles</span>
+        <span>Variable Serif</span>
+      </div>
+      <div class="specimen-display">The <em>Kessel Run</em><br>of SLO Taco Joints.</div>
+      <p style="margin-top:16px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:13px;color:var(--text-muted);">Used for hero headlines, mission titles, stop names, and trail card headers. A serif says: this is an artifact. A document. A real briefing.</p>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span>DM Sans</span>
+        <span>UI / Body</span>
+        <span>Grotesque Sans</span>
+      </div>
+      <div class="specimen-ui">2 stops completed. 3 remain.</div>
+      <p class="specimen-body" style="margin-top:12px;">Scan the QR code at your current location to decode the next clue. The Navigator has approved your route. Proceed to the next cantina.</p>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span>JetBrains Mono</span>
+        <span>Clues / Terminal / Data</span>
+        <span>Monospace</span>
+      </div>
+      <div class="clue-prompt">// TRANSMISSION DECODED — STOP 03</div>
+      <div class="specimen-mono">Where jawas trade in copper and steam,<br>and the barkeep wears a droid's gleam —<br>seek the third mark on the cantina wall,<br>where the desert heat meets the city's call.<span class="clue-cursor"></span></div>
+      <p style="margin-top:16px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:13px;color:var(--text-muted);">AI-generated clues render as terminal output with typewriter animation. The monospace treatment makes the reveal feel like decoded intelligence, not a text message.</p>
+    </div>
+  </div>
+</section>
+
+<!-- UI COMPONENTS -->
+<section class="section">
+  <div class="section-label">03 / Components</div>
+  <h2 class="section-title">The Building Blocks</h2>
+
+  <div class="components-grid">
+    <!-- Buttons -->
+    <div class="component-card">
+      <div class="component-label">Buttons</div>
+      <div class="btn-row" style="margin-bottom:16px;">
+        <button class="btn btn-primary">Scan QR Code</button>
+        <button class="btn btn-secondary">View Map</button>
+        <button class="btn btn-ghost">Share Trail</button>
+      </div>
+      <button class="btn btn-scan">▣ Scan QR — Unlock Next Stop</button>
+    </div>
+
+    <!-- Stop Cards -->
+    <div class="component-card">
+      <div class="component-label">Stop Cards</div>
+      <div class="stop-list">
+        <div class="stop-card completed">
+          <span class="stop-number mono">01</span>
+          <div class="stop-info">
+            <div class="stop-alias">Dex's Diner</div>
+            <div class="stop-real">Firestone Grill</div>
+          </div>
+          <span class="stop-badge badge-completed">Done</span>
+        </div>
+        <div class="stop-card active">
+          <span class="stop-number mono">02</span>
+          <div class="stop-info">
+            <div class="stop-alias">Mos Eisley Taqueria</div>
+            <div class="stop-real">Taqueria Santa Cruz</div>
+          </div>
+          <span class="stop-badge badge-active">Active</span>
+        </div>
+        <div class="stop-card locked">
+          <span class="stop-number mono">03</span>
+          <div class="stop-info">
+            <div class="stop-alias">Jabba's Taco Palace</div>
+            <div class="stop-real">???</div>
+          </div>
+          <span class="stop-badge badge-locked">Locked</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Inputs -->
+    <div class="component-card">
+      <div class="component-label">Inputs</div>
+      <div class="form-group">
+        <label class="form-label">Hunter Name</label>
+        <input class="form-input" type="text" placeholder="Enter your call sign..." value="Rebel Scout #7">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Route</label>
+        <input class="form-input" type="text" placeholder="Select your route..." value="The Kessel Run (SLO Downtown)">
+      </div>
+    </div>
+
+    <!-- Alerts -->
+    <div class="component-card">
+      <div class="component-label">State Alerts</div>
+      <div class="alert alert-success">
+        <span class="alert-icon">OK</span>
+        <span>Stop unlocked — the Navigator has approved your position.</span>
+      </div>
+      <div class="alert alert-info">
+        <span class="alert-icon">TX</span>
+        <span>Transmitting clue... scanning coordinates.</span>
+      </div>
+      <div class="alert alert-warning">
+        <span class="alert-icon">!!</span>
+        <span>Imperial checkpoint detected. Await approval.</span>
+      </div>
+      <div class="alert alert-error">
+        <span class="alert-icon">ERR</span>
+        <span>QR scan failed. Not at correct location.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SCREEN MOCKUPS -->
+<section class="section">
+  <div class="section-label">04 / Screens</div>
+  <h2 class="section-title">What It Looks Like</h2>
+
+  <div class="mockups-row">
+    <!-- Hunt Map Screen -->
+    <div>
+      <p style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:10px;color:var(--accent-gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;">Main Hunt Screen</p>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="notch-dot"></div></div>
+        <div class="phone-header">
+          <div class="phone-header-title">The Kessel Run</div>
+          <div class="phone-progress gold mono">2 / 5</div>
+        </div>
+        <div class="mock-map">
+          <div class="mock-map-grid"></div>
+          <div class="mock-map-road" style="width:80%;height:2px;top:45%;left:10%;"></div>
+          <div class="mock-map-road" style="width:2px;height:60%;top:20%;left:35%;"></div>
+          <div class="mock-map-road" style="width:2px;height:40%;top:30%;left:65%;"></div>
+          <div class="map-pin pin-completed" style="left:28%;top:38%;">1</div>
+          <div class="map-pin pin-completed" style="left:48%;top:55%;">2</div>
+          <div class="map-pin pin-active" style="left:65%;top:40%;">3</div>
+          <div class="map-pin pin-locked" style="left:80%;top:60%;">4</div>
+          <div class="map-pin pin-locked" style="left:55%;top:25%;">5</div>
+          <div class="map-user" style="left:60%;top:48%;"></div>
+          <div class="map-label" style="bottom:12px;right:12px;">SLO Downtown</div>
+          <div class="map-overlay"></div>
+        </div>
+        <div class="phone-stop-list">
+          <div class="phone-stop s-done">
+            <span class="phone-stop-num">01</span>
+            <span class="phone-stop-name">Dex's Diner</span>
+            <span class="phone-stop-badge badge-completed">Done</span>
+          </div>
+          <div class="phone-stop s-done">
+            <span class="phone-stop-num">02</span>
+            <span class="phone-stop-name">Wuher's Cantina</span>
+            <span class="phone-stop-badge badge-completed">Done</span>
+          </div>
+          <div class="phone-stop s-active">
+            <span class="phone-stop-num">03</span>
+            <span class="phone-stop-name">Mos Eisley Taqueria</span>
+            <span class="phone-stop-badge badge-active">Here</span>
+          </div>
+          <div class="phone-stop s-locked">
+            <span class="phone-stop-num">04</span>
+            <span class="phone-stop-name">Jabba's Taco Palace</span>
+            <span class="phone-stop-badge badge-locked">Locked</span>
+          </div>
+        </div>
+        <button class="phone-scan-cta">Scan QR — Unlock Stop 03</button>
+      </div>
+    </div>
+
+    <!-- Clue Reveal Screen -->
+    <div>
+      <p style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:10px;color:var(--accent-gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;">Clue Reveal</p>
+      <div class="phone-frame">
+        <div class="phone-notch"><div class="notch-dot"></div></div>
+        <div class="clue-screen" style="padding:20px;">
+          <div style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:10px;color:var(--accent-gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px;">// Stop 04 Unlocked</div>
+          <div class="clue-header">Jabba's Taco Palace</div>
+          <div class="clue-stop-info">Next clue decoded by the Navigator</div>
+
+          <div class="clue-terminal">
+            <div class="clue-prompt">TRANSMISSION&gt; decoding clue...</div>
+            <div class="clue-line">
+              Where the smell of carne meets<br>
+              the sound of bargains made in shade —<br>
+              find the sign that faces west,<br>
+              where the lunch crowd never fades.<span class="clue-cursor"></span>
+            </div>
+          </div>
+
+          <div style="background:var(--surface-elevated);border:1px solid var(--border);border-radius:5px;padding:12px;margin-bottom:14px;">
+            <div style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:9px;color:var(--text-muted);margin-bottom:6px;letter-spacing:.12em;">HINT COORDINATES</div>
+            <div style="font-family:&#39;DM Sans&#39;,sans-serif;font-size:13px;color:var(--text);">Downtown SLO — Higuera Street corridor</div>
+          </div>
+
+          <div class="alert alert-success" style="margin-bottom:0;">
+            <span class="alert-icon">OK</span>
+            <span>Navigator approved. Route unlocked.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trail Card -->
+    <div>
+      <p style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:10px;color:var(--accent-gold);letter-spacing:.15em;text-transform:uppercase;margin-bottom:12px;">Trail Card (Shareable OG)</p>
+      <div class="trail-card">
+        <div class="trail-card-header">OUTER RIM // TACO HUNT</div>
+        <div class="trail-card-title">The Kessel Run<br>of SLO</div>
+        <div class="trail-card-sub">Completed by Rebel Scout #7 — May 5, 2026</div>
+
+        <div class="trail-card-stops">
+          <div class="trail-card-stop">
+            <div class="trail-card-stop-dot"></div>
+            Dex's Diner (Firestone Grill)
+          </div>
+          <div class="trail-card-stop">
+            <div class="trail-card-stop-dot"></div>
+            Wuher's Cantina (SLO Brew)
+          </div>
+          <div class="trail-card-stop">
+            <div class="trail-card-stop-dot"></div>
+            Mos Eisley Taqueria (Taqueria Santa Cruz)
+          </div>
+          <div class="trail-card-stop">
+            <div class="trail-card-stop-dot"></div>
+            Jabba's Taco Palace (Taco Temple)
+          </div>
+          <div class="trail-card-stop">
+            <div class="trail-card-stop-dot"></div>
+            Cantina at Anchorhead (Petra's)
+          </div>
+        </div>
+
+        <div class="trail-card-footer">
+          <div class="trail-card-kessel">KESSEL RUN COMPLETE</div>
+          <div class="trail-card-date">2026-05-05</div>
+        </div>
+      </div>
+
+      <div style="margin-top:16px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:12px;color:var(--text-muted);line-height:1.6;">
+        Generated by satori at <span class="mono cyan">/api/og</span>. Shared via URL. Works in any browser — no app install needed.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPACING -->
+<section class="section">
+  <div class="section-label">05 / Spacing</div>
+  <h2 class="section-title">8px Base — Comfortable</h2>
+
+  <div class="spacing-row">
+    <div class="spacing-item">
+      <div class="spacing-bar" style="height:2px;"></div>
+      <div class="spacing-label">2xs<br>2px</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-bar" style="height:4px;"></div>
+      <div class="spacing-label">xs<br>4px</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-bar" style="height:8px;"></div>
+      <div class="spacing-label">sm<br>8px</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-bar" style="height:16px;"></div>
+      <div class="spacing-label">md<br>16px</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-bar" style="height:24px;"></div>
+      <div class="spacing-label">lg<br>24px</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-bar" style="height:32px;"></div>
+      <div class="spacing-label">xl<br>32px</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-bar" style="height:48px;"></div>
+      <div class="spacing-label">2xl<br>48px</div>
+    </div>
+    <div class="spacing-item">
+      <div class="spacing-bar" style="height:64px;"></div>
+      <div class="spacing-label">3xl<br>64px</div>
+    </div>
+  </div>
+
+  <p style="margin-top:32px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:14px;color:var(--text-muted);">
+    Comfortable density — not compact. This app runs outdoors in bright SLO sun, on phones with sweaty hands. Touch targets are generous. Clue text never wraps to tiny sizes.
+  </p>
+
+  <div style="margin-top:24px;">
+    <div style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:11px;color:var(--text-muted);margin-bottom:8px;">Border radius — hierarchical, not uniform:</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;align-items:center;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:40px;height:40px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:3px;"></div>
+        <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:11px;color:var(--text-muted);">3px — Badges, inputs</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:40px;height:40px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:5px;"></div>
+        <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:11px;color:var(--text-muted);">5px — Stop cards</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:40px;height:40px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:8px;"></div>
+        <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:11px;color:var(--text-muted);">8px — Component cards</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <div style="width:40px;height:40px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:16px;"></div>
+        <span style="font-family:&#39;JetBrains Mono&#39;,monospace;font-size:11px;color:var(--text-muted);">16px — Phone frames</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOTION -->
+<section class="section">
+  <div class="section-label">06 / Motion</div>
+  <h2 class="section-title">Intentional — Every Animation Earns Its Keep</h2>
+
+  <div class="motion-demo">
+    <div class="motion-item">
+      <div class="motion-label">Clue Reveal</div>
+      <div class="motion-text">Typewriter character-by-character</div>
+      <div class="motion-value">40ms per char, ease-out</div>
+    </div>
+    <div class="motion-item">
+      <div class="motion-label">Pin Drop</div>
+      <div class="motion-text">Map pin drops on unlock</div>
+      <div class="motion-value">300ms, spring(0.4)</div>
+    </div>
+    <div class="motion-item">
+      <div class="motion-label">Progress Fill</div>
+      <div class="motion-text">Stop completion bar</div>
+      <div class="motion-value">400ms, ease-out</div>
+      <div class="progress-demo" style="margin-top:12px;">
+        <div class="progress-fill"></div>
+      </div>
+    </div>
+    <div class="motion-item">
+      <div class="motion-label">Active Pulse</div>
+      <div class="motion-text">Current stop card + pin glow</div>
+      <div class="motion-value">2s, ease-in-out, infinite</div>
+    </div>
+    <div class="motion-item">
+      <div class="motion-label">Screen Enter</div>
+      <div class="motion-text">Page transitions</div>
+      <div class="motion-value">150ms, ease-out, fade-up 8px</div>
+    </div>
+    <div class="motion-item">
+      <div class="motion-label">Cursor Blink</div>
+      <div class="motion-text">Terminal clue cursor</div>
+      <div class="motion-value">1s, step-end, infinite</div>
+    </div>
+  </div>
+
+  <p style="margin-top:32px;font-family:&#39;DM Sans&#39;,sans-serif;font-size:14px;color:var(--text-muted);">
+    No animation without narrative purpose. The typewriter reveal IS the product experience — it's the moment the AI clue arrives. The pulse on the active pin says "you are here." Everything else is a transition, not a show.
+  </p>
+</section>
+
+<!-- DECISIONS LOG -->
+<section class="section">
+  <div class="section-label">07 / Decisions</div>
+  <h2 class="section-title">Why These Choices</h2>
+
+  <table style="width:100%;border-collapse:collapse;font-family:&#39;DM Sans&#39;,sans-serif;font-size:14px;">
+    <thead>
+      <tr style="border-bottom:1px solid var(--border-strong);">
+        <th style="text-align:left;padding:10px 0;color:var(--text-muted);font-weight:500;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;">Decision</th>
+        <th style="text-align:left;padding:10px 16px;color:var(--text-muted);font-weight:500;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;">Rationale</th>
+        <th style="text-align:left;padding:10px 0;color:var(--text-muted);font-weight:500;font-family:&#39;JetBrains Mono&#39;,monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;">Type</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 0;color:var(--text);vertical-align:top;">Fraunces serif for display</td>
+        <td style="padding:14px 16px;color:var(--text-muted);vertical-align:top;">Every competitor uses sans-serif for everything. A serif says "artifact, document, mission" not "app button." Immediate category distinction.</td>
+        <td style="padding:14px 0;"><span class="stop-badge badge-active" style="font-size:9px;">Risk</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 0;color:var(--text);vertical-align:top;">Amber/gold primary accent</td>
+        <td style="padding:14px 16px;color:var(--text-muted);vertical-align:top;">Category uses teal/orange-red/green. Gold = reward, cantina warmth, achievement. Nobody else occupies this space. Requires careful pairing to avoid "cheap" feel.</td>
+        <td style="padding:14px 0;"><span class="stop-badge badge-active" style="font-size:9px;">Risk</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 0;color:var(--text);vertical-align:top;">JetBrains Mono for clue text</td>
+        <td style="padding:14px 16px;color:var(--text-muted);vertical-align:top;">Clues are AI-generated transmissions, not SMS. The monospace + typewriter animation is the moment the product earns its theme. Keep clues short.</td>
+        <td style="padding:14px 0;"><span class="stop-badge badge-active" style="font-size:9px;">Risk</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 0;color:var(--text);vertical-align:top;">Dark map + styled pins</td>
+        <td style="padding:14px 16px;color:var(--text-muted);vertical-align:top;">Already baked into the stack (Google Maps dark style). Users expect a map. Zero learning curve.</td>
+        <td style="padding:14px 0;"><span class="stop-badge badge-completed" style="font-size:9px;">Safe</span></td>
+      </tr>
+      <tr style="border-bottom:1px solid var(--border);">
+        <td style="padding:14px 0;color:var(--text);vertical-align:top;">Card list with lock states</td>
+        <td style="padding:14px 16px;color:var(--text-muted);vertical-align:top;">Category baseline. Users immediately understand locked/unlocked/complete without instructions.</td>
+        <td style="padding:14px 0;"><span class="stop-badge badge-completed" style="font-size:9px;">Safe</span></td>
+      </tr>
+      <tr>
+        <td style="padding:14px 0;color:var(--text);vertical-align:top;">Large QR scan CTA</td>
+        <td style="padding:14px 16px;color:var(--text-muted);vertical-align:top;">Outdoor use, bright sun, sweaty hands. The scan button is the primary action — it gets all the real estate.</td>
+        <td style="padding:14px 0;"><span class="stop-badge badge-completed" style="font-size:9px;">Safe</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- FOOTER -->
+<div class="design-footer">
+  <div class="footer-badge">OUTER RIM // DESIGN SYSTEM v0.1 — April 2026</div>
+  <div class="footer-note">Generated by /design-consultation</div>
+</div>
+
+
+
+</body></html>
