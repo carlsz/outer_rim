@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "skills": {
+    "firebase-app-hosting-basics": {
+      "source": "firebase/skills",
+      "sourceType": "github",
+      "computedHash": "7f0e0330510b4e6b06bcede472cebb183a491b8a0098f92d7563454c40d78050"
+    },
+    "firebase-auth-basics": {
+      "source": "firebase/skills",
+      "sourceType": "github",
+      "computedHash": "ff79d278c0968f297d60f37532c32fd3b8bd9aad9c64b9f354585c701e80112a"
+    },
+    "firebase-basics": {
+      "source": "firebase/skills",
+      "sourceType": "github",
+      "computedHash": "c22edefdc07886432f1361b0412f82ccd53f82d107005acd6dae326f1e106ea7"
+    },
+    "firebase-firestore-standard": {
+      "source": "firebase/skills",
+      "sourceType": "github",
+      "computedHash": "ab2332607f40ae408e9c56e177b02fad55e071bfac4c2035a16ce0787768953e"
+    },
+    "firestore-security-rules-auditor": {
+      "source": "firebase/skills",
+      "sourceType": "github",
+      "computedHash": "8b797ed45d9d171b3a88f4980d72fc4accd1257206c555f4935599f9b9fd7d28"
+    }
+  }
+}

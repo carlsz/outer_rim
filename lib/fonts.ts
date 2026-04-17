@@ -12,13 +12,14 @@
 let frauncesCache: Promise<ArrayBuffer> | null = null;
 
 async function fetchFraunces(): Promise<ArrayBuffer> {
-  // Hit the Google Fonts CSS API with a desktop UA so it returns a woff2 URL.
+  // IE9 UA causes Google Fonts to return WOFF 1.0 — satori does not support WOFF2.
+  // Simple wght@700 URL avoids variable-font axes that old UAs don't understand.
   const css = await fetch(
-    "https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;1,9..144,400&display=block",
+    "https://fonts.googleapis.com/css2?family=Fraunces:wght@700&display=block",
     {
       headers: {
         "User-Agent":
-          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+          "Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)",
       },
       signal: AbortSignal.timeout(5000),
     }
@@ -27,15 +28,9 @@ async function fetchFraunces(): Promise<ArrayBuffer> {
     return r.text();
   });
 
-  // Find the @font-face block for weight 700 normal and extract its woff2 URL.
-  // Google Fonts returns multiple blocks; we must not grab the italic or wrong weight.
-  const block700 = css
-    .split("@font-face")
-    .find((b) => b.includes("font-weight: 700") && !b.includes("font-style: italic"));
-
-  const match = block700?.match(/src:\s*url\(([^)]+)\)\s*format\('woff2'\)/);
+  const match = css.match(/src:\s*url\(([^)]+)\)/);
   if (!match) {
-    throw new Error("Could not find Fraunces 700-normal woff2 URL in Google Fonts CSS");
+    throw new Error("Could not find Fraunces 700 font URL in Google Fonts CSS");
   }
 
   const fontUrl = match[1];

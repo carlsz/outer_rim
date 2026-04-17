@@ -22,6 +22,8 @@ export interface Hunt {
   navigatorToken: string | null;
   status: "active" | "complete";
   trailCardUrl?: string;
+  /** AI-generated clues keyed by tacoSpot ID — cached after first generation */
+  clues?: Record<string, string>;
   /** Structural shape shared by firebase/firestore and firebase-admin Timestamp */
   createdAt: { seconds: number; nanoseconds: number } | Date;
 }

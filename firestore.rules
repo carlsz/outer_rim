@@ -1,0 +1,26 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // tacoSpots — public read, no writes from client
+    match /tacoSpots/{spotId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // hunts — public read; clients may only update clues + pendingStop/navigatorToken
+    match /hunts/{huntId} {
+      allow read: if true;
+
+      // Allow writing the clues sub-field (clue caching from hunt page)
+      // Allow approve/deny writes (pendingStop, navigatorToken, unlockedCount, status)
+      allow update: if request.resource.data.keys().hasOnly([
+        'clues', 'pendingStop', 'navigatorToken', 'unlockedCount', 'status'
+      ]);
+
+      // No client-side create or delete
+      allow create, delete: if false;
+    }
+  }
+}
