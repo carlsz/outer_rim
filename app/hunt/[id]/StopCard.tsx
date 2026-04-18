@@ -12,6 +12,8 @@ interface StopCardProps {
   isLocked?: boolean;
   clue?: string;
   isLoadingClue?: boolean;
+  alreadyDecoded?: boolean;
+  onDecoded?: () => void;
 }
 
 const SPICE_DOTS = ["·", "·", "·", "·", "·"];
@@ -57,15 +59,18 @@ export function StopCard({
   isLocked,
   clue,
   isLoadingClue,
+  alreadyDecoded,
+  onDecoded,
 }: StopCardProps) {
-  const [expanded, setExpanded] = useState(false);
-  const [decoded, setDecoded] = useState(false);
-  const [decoding, setDecoding] = useState(false);
-  const [displayName, setDisplayName] = useState("");
-  const [displayAddr, setDisplayAddr] = useState("");
-  const decodeRef = useRef(false);
-
   const shortAddr = spot.address.split(",")[0];
+
+  const [expanded, setExpanded] = useState(false);
+  const [decoded, setDecoded] = useState(alreadyDecoded ?? false);
+  const [decoding, setDecoding] = useState(false);
+  const [displayName, setDisplayName] = useState(alreadyDecoded ? spot.name : "");
+  const [displayAddr, setDisplayAddr] = useState(alreadyDecoded ? shortAddr : "");
+  const [revealFlash, setRevealFlash] = useState(false);
+  const decodeRef = useRef(false);
 
   function handleDecode(e: React.MouseEvent) {
     e.stopPropagation();
@@ -81,6 +86,9 @@ export function StopCard({
       if (namesDone && addrDone) {
         setDecoding(false);
         setDecoded(true);
+        setRevealFlash(true);
+        setTimeout(() => setRevealFlash(false), 700);
+        onDecoded?.();
       }
     };
     scrambleReveal(spot.name, setDisplayName, () => { namesDone = true; checkBothDone(); });
@@ -89,7 +97,7 @@ export function StopCard({
     }, 120);
   }
 
-  const borderColor = isActive ? "border-gold" : "border-border";
+  const borderColor = isActive && decoded ? "border-cyan" : isActive ? "border-gold" : isCompleted ? "border-success" : "border-border";
   const cardClass = `rounded-[5px] border bg-surface p-4 ${borderColor} ${
     isLocked ? "opacity-80" : isCompleted ? "opacity-60" : ""
   } ${isActive && !decoded ? "pulse-ring" : ""}`;
@@ -140,7 +148,7 @@ export function StopCard({
               Stop {String(stopNumber).padStart(2, "0")}
             </span>
             {isCompleted && (
-              <span className="text-[11px] text-success">✓ complete</span>
+              <span className="text-[11px] tracking-[0.15em] uppercase text-success" style={{ fontFamily: "var(--font-mono)" }}>✓ Complete</span>
             )}
             {isActive && (
               <span
@@ -213,7 +221,7 @@ export function StopCard({
 
       {/* Clue terminal — active stop only, always visible */}
       {isActive && (
-        <ClueTerminal clue={clue ?? null} loading={isLoadingClue ?? false} />
+        <ClueTerminal clue={clue ?? null} loading={isLoadingClue ?? false} decoded={decoded} />
       )}
 
       {/* Decode interaction — active stop only */}
@@ -246,7 +254,7 @@ export function StopCard({
       {/* Revealed identity after decode */}
       {isActive && decoded && (
         <div
-          className="mt-3 pt-3 flex flex-col gap-3"
+          className="mt-3 pt-3 flex flex-col gap-3 transition-all duration-400 ease-out animate-fade-in-up"
           style={{ borderTop: "1px solid var(--border)" }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -258,8 +266,11 @@ export function StopCard({
               Identity confirmed
             </p>
             <p
-              className="text-[14px] font-semibold text-foreground leading-snug"
-              style={{ fontFamily: "var(--font-mono)" }}
+              className="text-[14px] font-semibold leading-snug transition-colors duration-500"
+              style={{
+                fontFamily: "var(--font-mono)",
+                color: revealFlash ? "var(--accent-cyan)" : "var(--foreground)",
+              }}
             >
               {displayName}
             </p>

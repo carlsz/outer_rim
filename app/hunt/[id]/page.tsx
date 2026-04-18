@@ -3,13 +3,14 @@
 import { use, useEffect, useRef, useState } from "react";
 import { doc, onSnapshot, updateDoc, increment } from "firebase/firestore";
 import Link from "next/link";
-import { Info } from "lucide-react";
+import { ArrowBigRightDash, Info } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { Hunt, TacoSpot } from "@/lib/types";
 import tacoSpots from "@/tacoSpots.json";
 import { HuntMap } from "./HuntMap";
 import { StopCard } from "./StopCard";
 import { InfoModal } from "./InfoModal";
+import { RebelBypassModal } from "./RebelBypassModal";
 
 const ALL_SPOTS: TacoSpot[] = tacoSpots as TacoSpot[];
 const spotById = Object.fromEntries(ALL_SPOTS.map((s) => [s.id, s]));
@@ -25,8 +26,11 @@ export default function HuntPage({
   const [clueLoading, setClueLoading] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
   const [forceAdvancing, setForceAdvancing] = useState(false);
-  // Track which spot IDs we've already requested a clue for to avoid duplicate fetches
+  const [bypassOpen, setBypassOpen] = useState(false);
+  const decodedSpots = useRef<Set<string>>(new Set());
   const requestedClues = useRef<Set<string>>(new Set());
+  const activeCardRef = useRef<HTMLDivElement>(null);
+  const hasScrolled = useRef(false);
 
   // Real-time hunt listener
   useEffect(() => {
@@ -46,6 +50,15 @@ export default function HuntPage({
     );
     return unsub;
   }, [id]);
+
+  // Scroll to active stop on first load
+  useEffect(() => {
+    if (!hunt || hasScrolled.current) return;
+    hasScrolled.current = true;
+    setTimeout(() => {
+      activeCardRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 300);
+  }, [hunt]);
 
   // Fetch and cache clue whenever a new stop is unlocked
   useEffect(() => {
@@ -169,6 +182,16 @@ export default function HuntPage({
           >
             {hunt.unlockedCount}/{hunt.stops.length} stops
           </span>
+          {isDev && !isComplete && (
+            <button
+              onClick={() => setBypassOpen(true)}
+              className="transition-colors"
+              aria-label="Rebel bypass"
+              style={{ color: "var(--accent-imperial, #ef4444)" }}
+            >
+              <ArrowBigRightDash size={18} />
+            </button>
+          )}
           <button
             onClick={() => setInfoOpen(true)}
             className="text-foreground-muted hover:text-foreground transition-colors"
@@ -178,6 +201,14 @@ export default function HuntPage({
           </button>
         </div>
       </header>
+      <RebelBypassModal
+        open={bypassOpen}
+        onClose={() => setBypassOpen(false)}
+        onAdvance={forceAdvance}
+        advancing={forceAdvancing}
+        currentStop={hunt.unlockedCount}
+        totalStops={hunt.stops.length}
+      />
       <InfoModal open={infoOpen} onClose={() => setInfoOpen(false)} />
 
       {/* Pending unlock banner */}
@@ -235,45 +266,21 @@ export default function HuntPage({
             const isCompleted = isUnlocked && !isActive;
             const isLocked = !isUnlocked;
             return (
-              <StopCard
-                key={spot.id}
-                spot={spot}
-                stopNumber={i + 1}
-                isActive={isActive}
-                isCompleted={isCompleted}
-                isLocked={isLocked}
-                clue={hunt.clues?.[spot.id]}
-                isLoadingClue={isActive && clueLoading}
-              />
+              <div key={spot.id} ref={isActive ? activeCardRef : undefined}>
+                <StopCard
+                  spot={spot}
+                  stopNumber={i + 1}
+                  isActive={isActive}
+                  isCompleted={isCompleted}
+                  isLocked={isLocked}
+                  clue={hunt.clues?.[spot.id]}
+                  isLoadingClue={isActive && clueLoading}
+                  alreadyDecoded={decodedSpots.current.has(spot.id)}
+                  onDecoded={() => { decodedSpots.current.add(spot.id); }}
+                />
+              </div>
             );
           })}
-          {isDev && !isComplete && (
-            <div
-              className="mt-4 p-3 rounded-[5px] flex flex-col gap-2"
-              style={{ border: "1px dashed var(--accent-imperial, #ef4444)" }}
-            >
-              <p
-                className="text-[9px] tracking-[0.25em] uppercase"
-                style={{ fontFamily: "var(--font-mono)", color: "var(--accent-imperial, #ef4444)" }}
-              >
-                ▒ Rebel Bypass // Dev Only
-              </p>
-              <button
-                onClick={forceAdvance}
-                disabled={forceAdvancing}
-                className="w-full flex items-center justify-center gap-2 py-2 rounded-[3px] text-[11px] tracking-[0.2em] uppercase transition-opacity hover:opacity-80 active:opacity-60 disabled:opacity-40 disabled:cursor-default"
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  color: "var(--accent-imperial, #ef4444)",
-                  border: "1px solid var(--accent-imperial, #ef4444)",
-                  background: "var(--surface-elevated)",
-                }}
-              >
-                <span>{forceAdvancing ? "⟳" : "⟶"}</span>
-                <span>{forceAdvancing ? "Advancing…" : "Force Advance"}</span>
-              </button>
-            </div>
-          )}
         </div>
       </div>
     </div>

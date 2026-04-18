@@ -5,14 +5,15 @@ import { useEffect, useState } from "react";
 interface ClueTerminalProps {
   clue: string | null;
   loading: boolean;
+  decoded: boolean;
 }
 
-export function ClueTerminal({ clue, loading }: ClueTerminalProps) {
+export function ClueTerminal({ clue, loading, decoded }: ClueTerminalProps) {
   const [displayed, setDisplayed] = useState("");
   const [animating, setAnimating] = useState(false);
 
   useEffect(() => {
-    if (!clue) return;
+    if (!clue || !decoded) return;
     setDisplayed("");
     setAnimating(true);
     let i = 0;
@@ -25,7 +26,15 @@ export function ClueTerminal({ clue, loading }: ClueTerminalProps) {
       }
     }, 40);
     return () => clearInterval(id);
-  }, [clue]);
+  }, [clue, decoded]);
+
+  const label = !decoded
+    ? "Intercepted Transmission"
+    : loading
+      ? "Intercepting transmission…"
+      : animating
+        ? "Decoding transmission…"
+        : "Transmission decoded";
 
   return (
     <div
@@ -33,17 +42,23 @@ export function ClueTerminal({ clue, loading }: ClueTerminalProps) {
       style={{ fontFamily: "var(--font-mono)" }}
     >
       <p className="text-[11px] tracking-[0.2em] uppercase text-cyan mb-2">
-        Transmission decoded
+        {label}
       </p>
 
-      {loading && (
-        <p className="text-[13px] text-foreground-muted">
-          <span className="inline-block w-2 h-3 bg-cyan mr-1 cursor-blink" />
-          Decoding transmission…
+      {!decoded && (
+        <p className="text-[13px] text-foreground-muted opacity-40 tracking-widest">
+          [ SIGNAL ENCRYPTED ]
         </p>
       )}
 
-      {!loading && clue && (
+      {decoded && loading && (
+        <p className="text-[13px] text-foreground-muted">
+          <span className="inline-block w-2 h-3 bg-cyan mr-1 cursor-blink" />
+          Intercepting…
+        </p>
+      )}
+
+      {decoded && !loading && clue && (
         <p className="text-[13px] leading-relaxed text-foreground">
           {displayed}
           {animating && (
