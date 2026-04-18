@@ -9,7 +9,7 @@ export default function Home() {
           className="text-[11px] tracking-[0.25em] uppercase text-gold font-mono"
           style={{ fontFamily: "var(--font-mono)" }}
         >
-          Outer Rim // SLO
+          Taco Hunt // SLO
         </p>
 
         {/* Hero title */}
@@ -18,7 +18,7 @@ export default function Home() {
             className="text-[52px] leading-none font-bold text-foreground"
             style={{ fontFamily: "Fraunces, serif" }}
           >
-            Taco Hunt
+            Outer Rim
           </h1>
           <p
             className="text-[18px] font-light italic text-gold"

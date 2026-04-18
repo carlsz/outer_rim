@@ -3,11 +3,13 @@
 import { use, useEffect, useRef, useState } from "react";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 import Link from "next/link";
+import { Info } from "lucide-react";
 import { db } from "@/lib/firebase";
 import { Hunt, TacoSpot } from "@/lib/types";
 import tacoSpots from "@/tacoSpots.json";
 import { HuntMap } from "./HuntMap";
 import { StopCard } from "./StopCard";
+import { InfoModal } from "./InfoModal";
 
 const ALL_SPOTS: TacoSpot[] = tacoSpots as TacoSpot[];
 const spotById = Object.fromEntries(ALL_SPOTS.map((s) => [s.id, s]));
@@ -21,6 +23,7 @@ export default function HuntPage({
   const [hunt, setHunt] = useState<Hunt | null>(null);
   const [notFound, setNotFound] = useState(false);
   const [clueLoading, setClueLoading] = useState(false);
+  const [infoOpen, setInfoOpen] = useState(false);
   // Track which spot IDs we've already requested a clue for to avoid duplicate fetches
   const requestedClues = useRef<Set<string>>(new Set());
 
@@ -140,13 +143,23 @@ export default function HuntPage({
             Outer Rim
           </span>
         </Link>
-        <span
-          className="text-[11px] tracking-[0.15em] uppercase text-foreground"
-          style={{ fontFamily: "var(--font-mono)" }}
-        >
-          {hunt.unlockedCount}/{hunt.stops.length} stops
-        </span>
+        <div className="flex items-center gap-3">
+          <span
+            className="text-[11px] tracking-[0.15em] uppercase text-foreground"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            {hunt.unlockedCount}/{hunt.stops.length} stops
+          </span>
+          <button
+            onClick={() => setInfoOpen(true)}
+            className="text-foreground-muted hover:text-foreground transition-colors"
+            aria-label="How to play"
+          >
+            <Info size={16} />
+          </button>
+        </div>
       </header>
+      <InfoModal open={infoOpen} onClose={() => setInfoOpen(false)} />
 
       {/* Pending unlock banner */}
       {hunt.pendingStop !== null && (
