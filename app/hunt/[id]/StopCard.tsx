@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { TacoSpot } from "@/lib/types";
 import { ClueTerminal } from "./ClueTerminal";
 
@@ -66,36 +66,37 @@ export function StopCard({
 
   const [expanded, setExpanded] = useState(false);
   const [decoded, setDecoded] = useState(alreadyDecoded ?? false);
-  const [decoding, setDecoding] = useState(false);
   const [transmissionReady, setTransmissionReady] = useState(alreadyDecoded ?? false);
   const [displayName, setDisplayName] = useState(alreadyDecoded ? spot.name : "");
   const [displayAddr, setDisplayAddr] = useState(alreadyDecoded ? shortAddr : "");
   const [revealFlash, setRevealFlash] = useState(false);
   const decodeRef = useRef(false);
 
-  function handleDecode(e: React.MouseEvent) {
-    e.stopPropagation();
-    if (decodeRef.current) return;
-    decodeRef.current = true;
-    setDecoding(true);
+  // Scramble-reveal the name/address once the clue typewriter finishes
+  useEffect(() => {
+    if (!transmissionReady || alreadyDecoded) return;
     setDisplayName(spot.name.replace(/[^ ]/g, () => SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]));
     setDisplayAddr(shortAddr.replace(/[^ ]/g, () => SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]));
-
     let namesDone = false;
     let addrDone = false;
     const checkBothDone = () => {
       if (namesDone && addrDone) {
-        setDecoding(false);
-        setDecoded(true);
         setRevealFlash(true);
         setTimeout(() => setRevealFlash(false), 700);
-        onDecoded?.();
       }
     };
     scrambleReveal(spot.name, setDisplayName, () => { namesDone = true; checkBothDone(); });
     setTimeout(() => {
       scrambleReveal(shortAddr, setDisplayAddr, () => { addrDone = true; checkBothDone(); });
     }, 120);
+  }, [transmissionReady]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  function handleDecode(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (decodeRef.current) return;
+    decodeRef.current = true;
+    setDecoded(true);
+    onDecoded?.();
   }
 
   const borderColor = isActive && decoded ? "border-cyan" : isActive ? "border-gold" : isCompleted ? "border-success" : "border-border";
@@ -230,31 +231,30 @@ export function StopCard({
         />
       )}
 
-      {/* Decode interaction — active stop only */}
-      {isActive && !decoded && (
-        <button
-          onClick={handleDecode}
-          disabled={decoding}
-          className="mt-3 w-full flex items-center justify-center gap-2 py-2 rounded-[3px] text-[11px] tracking-[0.2em] uppercase transition-opacity hover:opacity-80 active:opacity-60 disabled:cursor-default"
-          style={{
-            fontFamily: "var(--font-mono)",
-            color: decoding ? "var(--accent-cyan)" : "var(--accent-gold)",
-            border: `1px solid ${decoding ? "var(--accent-cyan)" : "var(--border-strong)"}`,
-            background: "var(--surface-elevated)",
-          }}
+      {/* Decode interaction — collapses smoothly after click */}
+      {isActive && (
+        <div
+          className="grid transition-all duration-300 ease-out"
+          style={{ gridTemplateRows: decoded ? "0fr" : "1fr" }}
         >
-          {decoding ? (
-            <>
-              <span className="animate-pulse">▒</span>
-              <span>Decoding…</span>
-            </>
-          ) : (
-            <>
+          <div className="overflow-hidden">
+            <button
+              onClick={handleDecode}
+              className="mt-3 w-full flex items-center justify-center gap-2 py-2 rounded-[3px] text-[11px] tracking-[0.2em] uppercase hover:opacity-80 active:opacity-60"
+              style={{
+                fontFamily: "var(--font-mono)",
+                color: "var(--accent-gold)",
+                border: "1px solid var(--border-strong)",
+                background: "var(--surface-elevated)",
+                opacity: decoded ? 0 : 1,
+                transition: "opacity 0.2s ease-out",
+              }}
+            >
               <span>⟶</span>
               <span>Decode Transmission</span>
-            </>
-          )}
-        </button>
+            </button>
+          </div>
+        </div>
       )}
 
       {/* Revealed identity after decode — waits for clue typewriter to finish */}
