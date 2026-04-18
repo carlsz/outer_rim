@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useEffect, useRef, useState } from "react";
-import { doc, onSnapshot, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc, increment } from "firebase/firestore";
 import Link from "next/link";
 import { Info } from "lucide-react";
 import { db } from "@/lib/firebase";
@@ -24,6 +24,7 @@ export default function HuntPage({
   const [notFound, setNotFound] = useState(false);
   const [clueLoading, setClueLoading] = useState(false);
   const [infoOpen, setInfoOpen] = useState(false);
+  const [forceAdvancing, setForceAdvancing] = useState(false);
   // Track which spot IDs we've already requested a clue for to avoid duplicate fetches
   const requestedClues = useRef<Set<string>>(new Set());
 
@@ -131,6 +132,24 @@ export default function HuntPage({
   const activeSpotId = hunt.stops[hunt.unlockedCount - 1] ?? null;
   const isComplete = hunt.status === "complete";
 
+  const isDev = process.env.NEXT_PUBLIC_DEV_MODE === "true";
+
+  async function forceAdvance() {
+    if (forceAdvancing || isComplete) return;
+    setForceAdvancing(true);
+    try {
+      const isLastStop = hunt.unlockedCount >= hunt.stops.length;
+      await updateDoc(doc(db, "hunts", id), {
+        unlockedCount: increment(1),
+        pendingStop: null,
+        navigatorToken: null,
+        ...(isLastStop ? { status: "complete" } : {}),
+      });
+    } finally {
+      setForceAdvancing(false);
+    }
+  }
+
   return (
     <div className="flex flex-col min-h-screen bg-background">
       {/* Header */}
@@ -228,6 +247,33 @@ export default function HuntPage({
               />
             );
           })}
+          {isDev && !isComplete && (
+            <div
+              className="mt-4 p-3 rounded-[5px] flex flex-col gap-2"
+              style={{ border: "1px dashed var(--accent-imperial, #ef4444)" }}
+            >
+              <p
+                className="text-[9px] tracking-[0.25em] uppercase"
+                style={{ fontFamily: "var(--font-mono)", color: "var(--accent-imperial, #ef4444)" }}
+              >
+                ▒ Rebel Bypass // Dev Only
+              </p>
+              <button
+                onClick={forceAdvance}
+                disabled={forceAdvancing}
+                className="w-full flex items-center justify-center gap-2 py-2 rounded-[3px] text-[11px] tracking-[0.2em] uppercase transition-opacity hover:opacity-80 active:opacity-60 disabled:opacity-40 disabled:cursor-default"
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--accent-imperial, #ef4444)",
+                  border: "1px solid var(--accent-imperial, #ef4444)",
+                  background: "var(--surface-elevated)",
+                }}
+              >
+                <span>{forceAdvancing ? "⟳" : "⟶"}</span>
+                <span>{forceAdvancing ? "Advancing…" : "Force Advance"}</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ service cloud.firestore {
 
       // Allow writing the clues sub-field (clue caching from hunt page)
       // Allow approve/deny writes (pendingStop, navigatorToken, unlockedCount, status)
-      allow update: if request.resource.data.keys().hasOnly([
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly([
         'clues', 'pendingStop', 'navigatorToken', 'unlockedCount', 'status'
       ]);
 
