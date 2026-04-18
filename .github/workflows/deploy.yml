@@ -21,12 +21,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/auth@c200f3691d83b41bf9bbd8638997a462592937ed  # v2
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
       - name: Set up gcloud
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@e427ad8a34f8676edf47cf7d7925499adf3eb74f  # v2
 
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.REGISTRY }} --quiet
@@ -42,6 +42,7 @@ jobs:
             --build-arg NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID }} \
             --build-arg NEXT_PUBLIC_FIREBASE_APP_ID=${{ secrets.NEXT_PUBLIC_FIREBASE_APP_ID }} \
             --build-arg NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }} \
+            --build-arg NEXT_PUBLIC_ADMIN_KEY=${{ secrets.NEXT_PUBLIC_ADMIN_KEY }} \
             -t $IMAGE \
             .
           docker push $IMAGE
@@ -56,4 +57,4 @@ jobs:
             --allow-unauthenticated \
             --min-instances 1 \
             --memory 1Gi \
-            --set-env-vars "FIREBASE_ADMIN_CREDENTIAL=${{ secrets.FIREBASE_ADMIN_CREDENTIAL }},ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }}"
+            --set-env-vars "FIREBASE_ADMIN_CREDENTIAL=${{ secrets.FIREBASE_ADMIN_CREDENTIAL }},ANTHROPIC_API_KEY=${{ secrets.ANTHROPIC_API_KEY }},ADMIN_KEY=${{ secrets.ADMIN_KEY }}"

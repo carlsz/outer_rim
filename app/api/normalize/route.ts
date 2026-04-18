@@ -17,6 +17,11 @@ Examples of valid output:
 [{"name":"Al Pastor Taco","price":3.5},{"name":"Horchata","price":null}]`;
 
 export async function POST(req: Request) {
+  const adminKey = process.env.ADMIN_KEY;
+  if (!adminKey || req.headers.get("x-admin-key") !== adminKey) {
+    return Response.json({ error: "unauthorized" }, { status: 401 });
+  }
+
   const body = await req.json();
   const { text, image, mediaType } = body;
 

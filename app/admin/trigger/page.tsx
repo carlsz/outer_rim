@@ -1,10 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { v4 as uuidv4 } from "uuid";
-import { db } from "@/lib/firebase";
-import { Hunt } from "@/lib/types";
 
 export default function AdminTriggerPage() {
   const [huntId, setHuntId] = useState("may5-2026");
@@ -17,40 +13,20 @@ export default function AdminTriggerPage() {
     setError(null);
     setNavigatorUrl(null);
     try {
-      const huntRef = doc(db, "hunts", huntId);
-      const snap = await getDoc(huntRef);
-      if (!snap.exists()) {
-        setError(`Hunt "${huntId}" not found in Firestore. Run npm run seed first.`);
+      const res = await fetch("/api/trigger", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ huntId }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error ?? "Trigger failed.");
         return;
       }
-
-      const hunt = { id: snap.id, ...snap.data() } as Hunt;
-
-      if (hunt.status === "complete") {
-        setError("Hunt is already complete.");
-        return;
-      }
-
-      if (hunt.pendingStop !== null) {
-        setError("A navigator unlock is already pending.");
-        return;
-      }
-
-      const token = uuidv4();
-      const pendingStop = hunt.unlockedCount;
-
-      if (pendingStop >= hunt.stops.length) {
-        setError("All stops are already unlocked.");
-        return;
-      }
-
-      await updateDoc(huntRef, { pendingStop, navigatorToken: token });
-
-      const origin = window.location.origin;
-      setNavigatorUrl(`${origin}/hunt/${huntId}/unlock?token=${token}`);
+      setNavigatorUrl(data.navigatorUrl);
     } catch (err) {
       console.error(err);
-      setError("Firestore write failed. Check console.");
+      setError("Request failed. Check console.");
     } finally {
       setLoading(false);
     }

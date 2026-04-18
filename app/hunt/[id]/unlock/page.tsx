@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useEffect, useState, Suspense } from "react";
-import { doc, onSnapshot, updateDoc, increment } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { db } from "@/lib/firebase";
@@ -31,13 +31,15 @@ function UnlockContent({ huntId }: { huntId: string }) {
     if (!hunt) return;
     setActing(true);
     try {
-      const isLastStop = hunt.unlockedCount >= hunt.stops.length;
-      await updateDoc(doc(db, "hunts", huntId), {
-        unlockedCount: increment(1),
-        pendingStop: null,
-        navigatorToken: null,
-        ...(isLastStop ? { status: "complete" } : {}),
+      const res = await fetch("/api/unlock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ huntId, token, action: "approve" }),
       });
+      if (!res.ok) {
+        console.error("[unlock] approve failed", await res.json());
+        return;
+      }
       setResult("approved");
     } finally {
       setActing(false);
@@ -48,10 +50,15 @@ function UnlockContent({ huntId }: { huntId: string }) {
     if (!hunt) return;
     setActing(true);
     try {
-      await updateDoc(doc(db, "hunts", huntId), {
-        pendingStop: null,
-        navigatorToken: null,
+      const res = await fetch("/api/unlock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ huntId, token, action: "deny" }),
       });
+      if (!res.ok) {
+        console.error("[unlock] deny failed", await res.json());
+        return;
+      }
       setResult("denied");
     } finally {
       setActing(false);

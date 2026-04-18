@@ -1,6 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getAdminDb } from "@/lib/firebase-admin";
 import { Hunt } from "@/lib/types";
 
 const client = new Anthropic();
@@ -19,8 +18,9 @@ export async function POST(req: Request) {
   }
 
   // Verify the hunt exists and spotId is a real stop in it
-  const huntSnap = await getDoc(doc(db, "hunts", huntId));
-  if (!huntSnap.exists()) {
+  const db = getAdminDb();
+  const huntSnap = await db.collection("hunts").doc(huntId).get();
+  if (!huntSnap.exists) {
     return Response.json({ error: "hunt not found" }, { status: 404 });
   }
   const hunt = { id: huntSnap.id, ...huntSnap.data() } as Hunt;
@@ -52,6 +52,12 @@ export async function POST(req: Request) {
     if (!clue) {
       return Response.json({ error: "empty response" }, { status: 502 });
     }
+
+    // Cache the clue server-side so no client write rule is needed
+    await db.collection("hunts").doc(huntId).update({
+      [`clues.${spotId}`]: clue,
+    });
+
     return Response.json({ clue });
   } catch (err) {
     console.error("[clue] Anthropic error:", err);

@@ -48,7 +48,10 @@ export default function NormalizePage() {
     try {
       const res = await fetch("/api/normalize", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-admin-key": process.env.NEXT_PUBLIC_ADMIN_KEY ?? "",
+        },
         body: JSON.stringify(body),
       });
       const data = await res.json();

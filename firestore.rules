@@ -9,21 +9,10 @@ service cloud.firestore {
       allow write: if false;
     }
 
-    // hunts — public read; clients may only update specific fields
+    // hunts — public read; all writes go through server-side API routes (Admin SDK)
     match /hunts/{huntId} {
       allow read: if true;
-
-      // Clue caching — any client can write AI-generated clue text
-      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['clues']);
-
-      // Game-state writes (pendingStop, navigatorToken, unlockedCount, status).
-      // TODO (before May 5): move to a server-side API route that verifies the
-      // navigator token via Admin SDK, eliminating open client writes to game state.
-      allow update: if request.resource.data.diff(resource.data).affectedKeys()
-        .hasOnly(['pendingStop', 'navigatorToken', 'unlockedCount', 'status']);
-
-      // No client-side create or delete
-      allow create, delete: if false;
+      allow write: if false;
     }
   }
 }

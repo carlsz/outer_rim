@@ -1,7 +1,7 @@
 "use client";
 
 import { use, useEffect, useRef, useState } from "react";
-import { doc, onSnapshot, updateDoc, increment } from "firebase/firestore";
+import { doc, onSnapshot } from "firebase/firestore";
 import Link from "next/link";
 import { ArrowBigRightDash, Info } from "lucide-react";
 import { db } from "@/lib/firebase";
@@ -92,12 +92,6 @@ export default function HuntPage({
         if (!r.ok) throw new Error(`/api/clue ${r.status}`);
         return r.json();
       })
-      .then(async ({ clue }: { clue: string }) => {
-        if (!clue) return;
-        await updateDoc(doc(db, "hunts", id), {
-          [`clues.${activeSpotId}`]: clue,
-        });
-      })
       .catch((err) => console.error("[clue] fetch error:", err))
       .finally(() => setClueLoading(false));
   }, [hunt, id]);
@@ -151,12 +145,10 @@ export default function HuntPage({
     if (!hunt || forceAdvancing || isComplete) return;
     setForceAdvancing(true);
     try {
-      const isLastStop = hunt.unlockedCount >= hunt.stops.length;
-      await updateDoc(doc(db, "hunts", id), {
-        unlockedCount: increment(1),
-        pendingStop: null,
-        navigatorToken: null,
-        ...(isLastStop ? { status: "complete" } : {}),
+      await fetch("/api/unlock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ huntId: id, action: "force" }),
       });
     } finally {
       setForceAdvancing(false);
