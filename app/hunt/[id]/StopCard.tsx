@@ -8,6 +8,7 @@ interface StopCardProps {
   stopNumber: number;
   isActive: boolean;
   isCompleted: boolean;
+  isLocked?: boolean;
   clue?: string;
   isLoadingClue?: boolean;
 }
@@ -19,14 +20,47 @@ export function StopCard({
   stopNumber,
   isActive,
   isCompleted,
+  isLocked,
   clue,
   isLoadingClue,
 }: StopCardProps) {
-  const cardClass = isActive
+  const cardClass = isLocked
+    ? "rounded-[5px] border bg-surface p-4 border-border opacity-60"
+    : isActive
     ? "rounded-[5px] border bg-surface p-4 pulse-ring border-gold"
     : isCompleted
     ? "rounded-[5px] border bg-surface p-4 border-border opacity-60"
     : "rounded-[5px] border bg-surface p-4 border-border";
+
+  if (isLocked) {
+    return (
+      <div className={cardClass}>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span
+              className="text-[11px] tracking-[0.2em] uppercase text-foreground-muted"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              Stop {String(stopNumber).padStart(2, "0")}
+            </span>
+            <span
+              className="text-[11px] tracking-[0.15em] uppercase text-foreground-muted"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              ▪ locked
+            </span>
+          </div>
+          <span className="text-[12px] text-foreground-muted opacity-50" style={{ fontFamily: "var(--font-mono)" }}>⊘</span>
+        </div>
+        <p
+          className="mt-1 text-[14px] text-foreground-muted leading-snug"
+          style={{ fontFamily: "Fraunces, serif" }}
+        >
+          {spot.swAlias}
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className={cardClass}>

@@ -4,66 +4,10 @@ import { Loader } from "@googlemaps/js-api-loader";
 import { useEffect, useRef } from "react";
 import { TacoSpot } from "@/lib/types";
 
-const DARK_STYLE: google.maps.MapTypeStyle[] = [
-  { elementType: "geometry", stylers: [{ color: "#0a0b0d" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#6b7280" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#0a0b0d" }] },
-  {
-    featureType: "road",
-    elementType: "geometry",
-    stylers: [{ color: "#1c2028" }],
-  },
-  {
-    featureType: "road",
-    elementType: "geometry.stroke",
-    stylers: [{ color: "#12151a" }],
-  },
-  {
-    featureType: "road.highway",
-    elementType: "geometry",
-    stylers: [{ color: "#2c3140" }],
-  },
-  {
-    featureType: "road.highway",
-    elementType: "labels.text.fill",
-    stylers: [{ color: "#6b7280" }],
-  },
-  {
-    featureType: "water",
-    elementType: "geometry",
-    stylers: [{ color: "#05070a" }],
-  },
-  {
-    featureType: "poi",
-    stylers: [{ visibility: "off" }],
-  },
-  {
-    featureType: "transit",
-    stylers: [{ visibility: "off" }],
-  },
-  {
-    featureType: "administrative",
-    elementType: "geometry",
-    stylers: [{ color: "#1c2028" }],
-  },
-  {
-    featureType: "administrative.land_parcel",
-    stylers: [{ visibility: "off" }],
-  },
-];
-
-// SVG pin: gold for active, dim for completed
 function makePinSvg(active: boolean) {
   const color = active ? "#c9a84c" : "#6b7280";
-  const glow = active
-    ? `filter: drop-shadow(0 0 6px rgba(201,168,76,0.8));`
-    : "";
-  return `
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32" style="${glow}">
-      <path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20S24 21 24 12C24 5.373 18.627 0 12 0z" fill="${color}"/>
-      <circle cx="12" cy="12" r="5" fill="${active ? '#0a0b0d' : '#0a0b0d'}"/>
-    </svg>
-  `;
+  const glow = active ? `filter: drop-shadow(0 0 6px rgba(201,168,76,0.8));` : "";
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32" style="${glow}"><path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20S24 21 24 12C24 5.373 18.627 0 12 0z" fill="${color}"/><circle cx="12" cy="12" r="5" fill="#0a0b0d"/></svg>`;
 }
 
 interface HuntMapProps {
@@ -91,25 +35,24 @@ export function HuntMap({ spots, activeSpotId }: HuntMapProps) {
     loader.importLibrary("maps").then(async ({ Map }) => {
       await loader.importLibrary("marker");
 
-      const center =
-        spots.length > 0
-          ? { lat: spots[0].lat, lng: spots[0].lng }
-          : { lat: 35.28, lng: -120.66 };
+      const center = spots.length > 0
+        ? { lat: spots[0].lat, lng: spots[0].lng }
+        : { lat: 35.28, lng: -120.66 };
 
       if (!mapRef.current && containerRef.current) {
         mapRef.current = new Map(containerRef.current, {
+          mapId: "1bb276b74fcc0021ce78c5f9",
           center,
           zoom: 15,
-          styles: DARK_STYLE,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          colorScheme: "DARK" as any,
           disableDefaultUI: true,
           zoomControl: true,
-          mapId: "outer-rim-hunt",
         });
       }
 
       const map = mapRef.current!;
 
-      // Clear old markers
       markersRef.current.forEach((m) => (m.map = null));
       markersRef.current = [];
       polylineRef.current?.setMap(null);
@@ -132,7 +75,6 @@ export function HuntMap({ spots, activeSpotId }: HuntMapProps) {
         path.push({ lat: spot.lat, lng: spot.lng });
       }
 
-      // Draw route polyline
       polylineRef.current = new google.maps.Polyline({
         path,
         geodesic: false,
@@ -153,19 +95,10 @@ export function HuntMap({ spots, activeSpotId }: HuntMapProps) {
         map,
       });
 
-      // Pan to active stop
       const active = spots.find((s) => s.id === activeSpotId);
-      if (active) {
-        map.panTo({ lat: active.lat, lng: active.lng });
-      }
+      if (active) map.panTo({ lat: active.lat, lng: active.lng });
     });
   }, [spots, activeSpotId]);
 
-  return (
-    <div
-      ref={containerRef}
-      className="w-full h-full"
-      style={{ minHeight: "220px" }}
-    />
-  );
+  return <div ref={containerRef} className="w-full h-full" />;
 }

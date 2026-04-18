@@ -123,6 +123,8 @@ export default function HuntPage({
     .map((sid) => spotById[sid])
     .filter(Boolean) as TacoSpot[];
 
+  const allSpots = hunt.stops.map((sid) => spotById[sid]).filter(Boolean) as TacoSpot[];
+
   const activeSpotId = hunt.stops[hunt.unlockedCount - 1] ?? null;
   const isComplete = hunt.status === "complete";
 
@@ -139,7 +141,7 @@ export default function HuntPage({
           </span>
         </Link>
         <span
-          className="text-[11px] tracking-[0.15em] uppercase text-foreground-muted"
+          className="text-[11px] tracking-[0.15em] uppercase text-foreground"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           {hunt.unlockedCount}/{hunt.stops.length} stops
@@ -186,18 +188,20 @@ export default function HuntPage({
       )}
 
       {/* Map */}
-      <div className="relative w-full shrink-0" style={{ height: "40vw", minHeight: "200px", maxHeight: "320px" }}>
+      <div className="relative w-full shrink-0 overflow-hidden" style={{ height: "40vw", minHeight: "200px", maxHeight: "320px" }}>
         <HuntMap spots={unlockedSpots} activeSpotId={activeSpotId} />
         {/* Gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-10 pointer-events-none bg-gradient-to-t from-background to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none z-[100] bg-gradient-to-t from-background to-transparent" />
       </div>
 
       {/* Stop list */}
       <div className="flex-1 overflow-y-auto px-4 pb-8 pt-2 -mt-2">
         <div className="max-w-[480px] mx-auto flex flex-col gap-2">
-          {unlockedSpots.map((spot, i) => {
+          {allSpots.map((spot, i) => {
+            const isUnlocked = i < hunt.unlockedCount;
             const isActive = spot.id === activeSpotId && !isComplete;
-            const isCompleted = !isActive;
+            const isCompleted = isUnlocked && !isActive;
+            const isLocked = !isUnlocked;
             return (
               <StopCard
                 key={spot.id}
@@ -205,6 +209,7 @@ export default function HuntPage({
                 stopNumber={i + 1}
                 isActive={isActive}
                 isCompleted={isCompleted}
+                isLocked={isLocked}
                 clue={hunt.clues?.[spot.id]}
                 isLoadingClue={isActive && clueLoading}
               />
