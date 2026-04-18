@@ -67,6 +67,7 @@ export function StopCard({
   const [expanded, setExpanded] = useState(false);
   const [decoded, setDecoded] = useState(alreadyDecoded ?? false);
   const [decoding, setDecoding] = useState(false);
+  const [transmissionReady, setTransmissionReady] = useState(alreadyDecoded ?? false);
   const [displayName, setDisplayName] = useState(alreadyDecoded ? spot.name : "");
   const [displayAddr, setDisplayAddr] = useState(alreadyDecoded ? shortAddr : "");
   const [revealFlash, setRevealFlash] = useState(false);
@@ -221,7 +222,12 @@ export function StopCard({
 
       {/* Clue terminal — active stop only, always visible */}
       {isActive && (
-        <ClueTerminal clue={clue ?? null} loading={isLoadingClue ?? false} decoded={decoded} />
+        <ClueTerminal
+          clue={clue ?? null}
+          loading={isLoadingClue ?? false}
+          decoded={decoded}
+          onTransmissionDecoded={() => setTransmissionReady(true)}
+        />
       )}
 
       {/* Decode interaction — active stop only */}
@@ -251,8 +257,8 @@ export function StopCard({
         </button>
       )}
 
-      {/* Revealed identity after decode */}
-      {isActive && decoded && (
+      {/* Revealed identity after decode — waits for clue typewriter to finish */}
+      {isActive && decoded && transmissionReady && (
         <div
           className="mt-3 pt-3 flex flex-col gap-3 transition-all duration-400 ease-out animate-fade-in-up"
           style={{ borderTop: "1px solid var(--border)" }}

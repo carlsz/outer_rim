@@ -6,9 +6,10 @@ interface ClueTerminalProps {
   clue: string | null;
   loading: boolean;
   decoded: boolean;
+  onTransmissionDecoded?: () => void;
 }
 
-export function ClueTerminal({ clue, loading, decoded }: ClueTerminalProps) {
+export function ClueTerminal({ clue, loading, decoded, onTransmissionDecoded }: ClueTerminalProps) {
   const [displayed, setDisplayed] = useState("");
   const [animating, setAnimating] = useState(false);
 
@@ -23,6 +24,7 @@ export function ClueTerminal({ clue, loading, decoded }: ClueTerminalProps) {
       if (i >= clue.length) {
         clearInterval(id);
         setAnimating(false);
+        onTransmissionDecoded?.();
       }
     }, 40);
     return () => clearInterval(id);
@@ -36,12 +38,17 @@ export function ClueTerminal({ clue, loading, decoded }: ClueTerminalProps) {
         ? "Decoding transmission…"
         : "Transmission decoded";
 
+  const labelColor = decoded ? "var(--accent-cyan)" : "var(--accent-gold)";
+
   return (
     <div
       className="rounded-[3px] border border-border bg-background px-4 py-3 mt-3"
       style={{ fontFamily: "var(--font-mono)" }}
     >
-      <p className="text-[11px] tracking-[0.2em] uppercase text-cyan mb-2">
+      <p
+        className="text-[11px] tracking-[0.2em] uppercase mb-2 transition-colors duration-300"
+        style={{ color: labelColor }}
+      >
         {label}
       </p>
 
