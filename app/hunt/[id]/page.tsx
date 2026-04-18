@@ -27,6 +27,7 @@ export default function HuntPage({
   const [infoOpen, setInfoOpen] = useState(false);
   const [forceAdvancing, setForceAdvancing] = useState(false);
   const [bypassOpen, setBypassOpen] = useState(false);
+  const [mapExpanded, setMapExpanded] = useState(false);
   const decodedSpots = useRef<Set<string>>(new Set());
   const requestedClues = useRef<Set<string>>(new Set());
   const activeCardRef = useRef<HTMLDivElement>(null);
@@ -251,10 +252,33 @@ export default function HuntPage({
       )}
 
       {/* Map */}
-      <div className="relative w-full shrink-0 overflow-hidden" style={{ height: "40vw", minHeight: "200px", maxHeight: "320px" }}>
+      <div
+        className="relative w-full shrink-0 overflow-hidden"
+        style={{
+          height: mapExpanded ? "70vh" : "clamp(200px, 40vw, 320px)",
+          transition: "height 0.4s ease-out",
+        }}
+      >
         <HuntMap spots={unlockedSpots} activeSpotId={activeSpotId} />
-        {/* Gradient fade */}
-        <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none z-[100] bg-gradient-to-t from-background to-transparent" />
+        {/* Gradient fade — fades out when expanded */}
+        <div
+          className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none z-[100] bg-gradient-to-t from-background to-transparent transition-opacity duration-300"
+          style={{ opacity: mapExpanded ? 0 : 1 }}
+        />
+        {/* Expand / collapse affordance */}
+        <button
+          onClick={() => setMapExpanded((x) => !x)}
+          className="absolute bottom-3 right-3 z-[101] flex items-center gap-1.5 px-2.5 py-1.5 rounded-[3px] text-[10px] tracking-[0.15em] uppercase transition-opacity hover:opacity-90 active:opacity-70"
+          style={{
+            fontFamily: "var(--font-mono)",
+            background: "rgba(10,11,13,0.72)",
+            color: "var(--accent-gold)",
+            border: "1px solid var(--border-strong)",
+            backdropFilter: "blur(6px)",
+          }}
+        >
+          {mapExpanded ? "↙ collapse" : "↗ expand"}
+        </button>
       </div>
 
       {/* Stop list */}
