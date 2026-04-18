@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { TacoSpot } from "@/lib/types";
 import { ClueTerminal } from "./ClueTerminal";
 
@@ -15,9 +15,38 @@ interface StopCardProps {
 }
 
 const SPICE_DOTS = ["·", "·", "·", "·", "·"];
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@!%▓░▒";
 
 function mapsUrl(spot: TacoSpot) {
   return `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
+}
+
+function scrambleReveal(
+  target: string,
+  setter: (s: string) => void,
+  onDone?: () => void
+) {
+  const len = target.length;
+  let frame = 0;
+  const totalFrames = len * 3;
+  const id = setInterval(() => {
+    frame++;
+    const locked = Math.floor(frame / 3);
+    const display = target
+      .split("")
+      .map((ch, i) => {
+        if (i < locked) return ch;
+        if (ch === " " || ch === "·" || ch === ",") return ch;
+        return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
+      })
+      .join("");
+    setter(display);
+    if (locked >= len) {
+      clearInterval(id);
+      setter(target);
+      onDone?.();
+    }
+  }, 35);
 }
 
 export function StopCard({
@@ -30,6 +59,35 @@ export function StopCard({
   isLoadingClue,
 }: StopCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [decoded, setDecoded] = useState(false);
+  const [decoding, setDecoding] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [displayAddr, setDisplayAddr] = useState("");
+  const decodeRef = useRef(false);
+
+  const shortAddr = spot.address.split(",")[0];
+
+  function handleDecode(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (decodeRef.current) return;
+    decodeRef.current = true;
+    setDecoding(true);
+    setDisplayName(spot.name.replace(/[^ ]/g, () => SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]));
+    setDisplayAddr(shortAddr.replace(/[^ ]/g, () => SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]));
+
+    let namesDone = false;
+    let addrDone = false;
+    const checkBothDone = () => {
+      if (namesDone && addrDone) {
+        setDecoding(false);
+        setDecoded(true);
+      }
+    };
+    scrambleReveal(spot.name, setDisplayName, () => { namesDone = true; checkBothDone(); });
+    setTimeout(() => {
+      scrambleReveal(shortAddr, setDisplayAddr, () => { addrDone = true; checkBothDone(); });
+    }, 120);
+  }
 
   const borderColor = isActive ? "border-gold" : "border-border";
   const cardClass = `rounded-[5px] border bg-surface p-4 ${borderColor} ${
@@ -102,10 +160,12 @@ export function StopCard({
             {spot.swAlias}
           </h2>
 
-          {/* Real name + short address */}
-          <p className="text-[13px] text-foreground-muted leading-snug">
-            {spot.name} · {spot.address.split(",")[0]}
-          </p>
+          {/* Real name + short address — hidden on active until decoded */}
+          {!isActive && (
+            <p className="text-[13px] text-foreground-muted leading-snug">
+              {spot.name} · {shortAddr}
+            </p>
+          )}
         </div>
 
         {/* Spice rating + chevron */}
@@ -156,63 +216,135 @@ export function StopCard({
         <ClueTerminal clue={clue ?? null} loading={isLoadingClue ?? false} />
       )}
 
-      {/* Expandable details */}
-      <div
-        className="grid transition-all duration-200 ease-out"
-        style={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}
-      >
-        <div className="overflow-hidden">
-          <div
-            className="mt-3 pt-3 flex flex-col gap-3"
-            style={{ borderTop: "1px solid var(--border)" }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Full address */}
-            <div>
-              <p
-                className="text-[10px] tracking-[0.15em] uppercase text-foreground-muted mb-1"
-                style={{ fontFamily: "var(--font-mono)" }}
-              >
-                Location
-              </p>
-              <p className="text-[13px] text-foreground">{spot.address}</p>
-            </div>
+      {/* Decode interaction — active stop only */}
+      {isActive && !decoded && (
+        <button
+          onClick={handleDecode}
+          disabled={decoding}
+          className="mt-3 w-full flex items-center justify-center gap-2 py-2 rounded-[3px] text-[11px] tracking-[0.2em] uppercase transition-opacity hover:opacity-80 active:opacity-60 disabled:cursor-default"
+          style={{
+            fontFamily: "var(--font-mono)",
+            color: decoding ? "var(--accent-cyan)" : "var(--accent-gold)",
+            border: `1px solid ${decoding ? "var(--accent-cyan)" : "var(--border-strong)"}`,
+            background: "var(--surface-elevated)",
+          }}
+        >
+          {decoding ? (
+            <>
+              <span className="animate-pulse">▒</span>
+              <span>Decoding…</span>
+            </>
+          ) : (
+            <>
+              <span>⟶</span>
+              <span>Decode Transmission</span>
+            </>
+          )}
+        </button>
+      )}
 
-            {/* Cached clue for completed stops */}
-            {isCompleted && clue && (
+      {/* Revealed identity after decode */}
+      {isActive && decoded && (
+        <div
+          className="mt-3 pt-3 flex flex-col gap-3"
+          style={{ borderTop: "1px solid var(--border)" }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div>
+            <p
+              className="text-[10px] tracking-[0.15em] uppercase text-foreground-muted mb-1"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              Identity confirmed
+            </p>
+            <p
+              className="text-[14px] font-semibold text-foreground leading-snug"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              {displayName}
+            </p>
+            <p
+              className="text-[12px] text-foreground-muted mt-0.5"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              {displayAddr}
+            </p>
+          </div>
+          <a
+            href={mapsUrl(spot)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[12px] font-mono tracking-widest uppercase px-3 py-2 rounded-[3px] text-center transition-opacity hover:opacity-80"
+            style={{
+              background: "var(--surface-elevated)",
+              color: "var(--accent-gold)",
+              border: "1px solid var(--border-strong)",
+            }}
+          >
+            ⟶ Get Directions
+          </a>
+        </div>
+      )}
+
+      {/* Expandable details — non-active stops */}
+      {!isActive && (
+        <div
+          className="grid transition-all duration-200 ease-out"
+          style={{ gridTemplateRows: expanded ? "1fr" : "0fr" }}
+        >
+          <div className="overflow-hidden">
+            <div
+              className="mt-3 pt-3 flex flex-col gap-3"
+              style={{ borderTop: "1px solid var(--border)" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Full address */}
               <div>
                 <p
                   className="text-[10px] tracking-[0.15em] uppercase text-foreground-muted mb-1"
                   style={{ fontFamily: "var(--font-mono)" }}
                 >
-                  Transmission
+                  Location
                 </p>
-                <p
-                  className="text-[12px] text-cyan leading-relaxed"
-                  style={{ fontFamily: "var(--font-mono)" }}
-                >
-                  {clue}
-                </p>
+                <p className="text-[13px] text-foreground">{spot.address}</p>
               </div>
-            )}
 
-            {/* Directions link */}
-            <a
-              href={mapsUrl(spot)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[12px] font-mono tracking-widest uppercase px-3 py-2 rounded-[3px] text-center transition-opacity hover:opacity-80"
-              style={{
-                background: "var(--surface-elevated)",
-                color: "var(--accent-gold)",
-                border: "1px solid var(--border-strong)",
-              }}
-            >
-              ⟶ Get Directions
-            </a>
+              {/* Cached clue for completed stops */}
+              {isCompleted && clue && (
+                <div>
+                  <p
+                    className="text-[10px] tracking-[0.15em] uppercase text-foreground-muted mb-1"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
+                    Transmission
+                  </p>
+                  <p
+                    className="text-[12px] text-cyan leading-relaxed"
+                    style={{ fontFamily: "var(--font-mono)" }}
+                  >
+                    {clue}
+                  </p>
+                </div>
+              )}
+
+              {/* Directions link */}
+              <a
+                href={mapsUrl(spot)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[12px] font-mono tracking-widest uppercase px-3 py-2 rounded-[3px] text-center transition-opacity hover:opacity-80"
+                style={{
+                  background: "var(--surface-elevated)",
+                  color: "var(--accent-gold)",
+                  border: "1px solid var(--border-strong)",
+                }}
+              >
+                ⟶ Get Directions
+              </a>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
