@@ -91,8 +91,8 @@ export function StopCard({
 
   const borderColor = isActive ? "border-gold" : "border-border";
   const cardClass = `rounded-[5px] border bg-surface p-4 ${borderColor} ${
-    isLocked || isCompleted ? "opacity-60" : ""
-  } ${isActive ? "pulse-ring" : ""}`;
+    isLocked ? "opacity-80" : isCompleted ? "opacity-60" : ""
+  } ${isActive && !decoded ? "pulse-ring" : ""}`;
 
   if (isLocked) {
     return (
