@@ -14,9 +14,11 @@ Hunt down the best tacos in San Luis Obispo — each stop disguised as a Star Wa
 + Deployment: Cloud Run
 
 ## Core Demo Loops
-+ The Clue Generator: Claude writes a riddle-style clue for each taco stop based on its hint keywords, revealed when the previous stop is unlocked.
++ The Clue Generator: Claude writes a riddle-style clue for each taco stop based on its hint keywords, revealed after the player decodes the transmission.
++ The Decode Flow: Players tap "Decode Transmission" to trigger the clue typewriter; once complete, the stop identity scramble-reveals with a cyan flash.
 + The Trail Card: satori renders a shareable OG image listing completed stops — the proof you survived the outer rim.
 + The Navigator Unlock: Human-in-the-loop approval via a token-gated URL to reveal the next stop on the map.
++ The Map: Full-width dark-style Google Map with expand/collapse (tap ↗ to grow to 70vh), pinned to active stop.
 
 ## Dev Setup
 
@@ -32,3 +34,15 @@ npm run dev     # http://localhost:3000
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
 - `FIREBASE_ADMIN_CREDENTIAL` — base64-encoded service account JSON (seed script + admin trigger)
 - `ANTHROPIC_API_KEY` — clue generator
+- `NEXT_PUBLIC_DEV_MODE=true` — enables force-advance dev button (omit in production)
+
+## Agent Skills
+
+Workflows are powered by [gstack](https://github.com/garrytan/gstack). Install once:
+
+```bash
+git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+cd ~/.claude/skills/gstack && ./setup
+```
+
+Key skills: `/review` (pre-push), `/ship` (PR + deploy), `/qa` (visual testing), `/investigate` (debug), `/design-review` (UI audit).

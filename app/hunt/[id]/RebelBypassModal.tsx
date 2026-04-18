@@ -6,7 +6,7 @@ import { X } from "lucide-react";
 interface RebelBypassModalProps {
   open: boolean;
   onClose: () => void;
-  onAdvance: () => void;
+  onAdvance: () => Promise<void>;
   advancing: boolean;
   currentStop: number;
   totalStops: number;
@@ -28,8 +28,11 @@ export function RebelBypassModal({
   }, [open, onClose]);
 
   async function handleAdvance() {
-    await onAdvance();
-    onClose();
+    try {
+      await onAdvance();
+    } finally {
+      onClose();
+    }
   }
 
   return (
@@ -63,7 +66,7 @@ export function RebelBypassModal({
           </p>
           <button
             onClick={onClose}
-            className="w-8 h-8 flex items-center justify-center rounded-full text-foreground-muted hover:text-foreground transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-[8px] text-foreground-muted hover:text-foreground transition-colors"
             aria-label="Close"
           >
             <X size={18} />

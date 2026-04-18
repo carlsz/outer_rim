@@ -27,6 +27,35 @@ npm run dev     # http://localhost:3000
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
 - `FIREBASE_ADMIN_CREDENTIAL` — base64-encoded service account JSON (seed script + admin trigger)
 - `ANTHROPIC_API_KEY` — clue generator
+- `NEXT_PUBLIC_DEV_MODE=true` — enables the Rebel Bypass (force-advance) button; omit or set false in production
+
+**Useful commands:**
+```bash
+firebase deploy --only firestore:rules   # deploy Firestore security rules (required before each prod push)
+npm run build                            # type-check + production build (runs in CI)
+```
+
+## Agent Skills (gstack)
+
+This project uses [gstack](https://github.com/garrytan/gstack) for AI-assisted workflows. New developers should install it once:
+
+```bash
+git clone https://github.com/garrytan/gstack.git ~/.claude/skills/gstack
+cd ~/.claude/skills/gstack && ./setup
+```
+
+Skills used in this project (invoked via `/skill-name` in Claude Code):
+
+| Skill | When to use |
+|-------|-------------|
+| `/review` | Before every push — checks for security, type, and design issues |
+| `/ship` | Create PR + deploy |
+| `/qa` | Visual QA of the running app |
+| `/investigate` | Debug errors and 500s |
+| `/checkpoint` | Save progress mid-session |
+| `/design-review` | Visual audit against DESIGN.md |
+| `/health` | Code quality dashboard |
+| `/document-release` | Update docs after shipping |
 
 ## Design Doc
 

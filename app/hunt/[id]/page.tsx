@@ -14,6 +14,7 @@ import { RebelBypassModal } from "./RebelBypassModal";
 
 const ALL_SPOTS: TacoSpot[] = tacoSpots as TacoSpot[];
 const spotById = Object.fromEntries(ALL_SPOTS.map((s) => [s.id, s]));
+const isDev = process.env.NEXT_PUBLIC_DEV_MODE === "true";
 
 export default function HuntPage({
   params,
@@ -146,10 +147,8 @@ export default function HuntPage({
   const activeSpotId = hunt.stops[hunt.unlockedCount - 1] ?? null;
   const isComplete = hunt.status === "complete";
 
-  const isDev = process.env.NEXT_PUBLIC_DEV_MODE === "true";
-
   async function forceAdvance() {
-    if (forceAdvancing || isComplete) return;
+    if (!hunt || forceAdvancing || isComplete) return;
     setForceAdvancing(true);
     try {
       const isLastStop = hunt.unlockedCount >= hunt.stops.length;
@@ -186,7 +185,7 @@ export default function HuntPage({
           {isDev && !isComplete && (
             <button
               onClick={() => setBypassOpen(true)}
-              className="transition-colors"
+              className="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef4444]"
               aria-label="Rebel bypass"
               style={{ color: "var(--accent-imperial, #ef4444)" }}
             >

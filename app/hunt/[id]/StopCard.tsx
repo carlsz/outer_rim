@@ -79,16 +79,18 @@ export function StopCard({
     setDisplayAddr(shortAddr.replace(/[^ ]/g, () => SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]));
     let namesDone = false;
     let addrDone = false;
+    let flashTimer: ReturnType<typeof setTimeout>;
     const checkBothDone = () => {
       if (namesDone && addrDone) {
         setRevealFlash(true);
-        setTimeout(() => setRevealFlash(false), 700);
+        flashTimer = setTimeout(() => setRevealFlash(false), 700);
       }
     };
     scrambleReveal(spot.name, setDisplayName, () => { namesDone = true; checkBothDone(); });
-    setTimeout(() => {
+    const addrTimer = setTimeout(() => {
       scrambleReveal(shortAddr, setDisplayAddr, () => { addrDone = true; checkBothDone(); });
     }, 120);
+    return () => { clearTimeout(addrTimer); clearTimeout(flashTimer); };
   }, [transmissionReady]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function handleDecode(e: React.MouseEvent) {
@@ -260,7 +262,7 @@ export function StopCard({
       {/* Revealed identity after decode — waits for clue typewriter to finish */}
       {isActive && decoded && transmissionReady && (
         <div
-          className="mt-3 pt-3 flex flex-col gap-3 transition-all duration-400 ease-out animate-fade-in-up"
+          className="mt-3 pt-3 flex flex-col gap-3 transition-all duration-[400ms] ease-out animate-fade-in-up"
           style={{ borderTop: "1px solid var(--border)" }}
           onClick={(e) => e.stopPropagation()}
         >
