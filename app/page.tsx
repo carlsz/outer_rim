@@ -96,7 +96,7 @@ export default function Home() {
             fontFamily: "var(--font-mono)",
             color: "var(--accent-gold)",
             opacity: bootLine1 ? 1 : 0,
-            transform: bootLine1 ? "translateX(0)" : "translateX(-6px)",
+            transform: bootLine1 ? "translateX(0)" : "translateX(-8px)",
           }}
         >
           ⟶ Establishing secure channel...
@@ -107,7 +107,7 @@ export default function Home() {
             fontFamily: "var(--font-mono)",
             color: "var(--accent-gold)",
             opacity: bootLine2 ? 1 : 0,
-            transform: bootLine2 ? "translateX(0)" : "translateX(-6px)",
+            transform: bootLine2 ? "translateX(0)" : "translateX(-8px)",
           }}
         >
           ⟶ Signal acquired
@@ -118,7 +118,7 @@ export default function Home() {
             fontFamily: "var(--font-mono)",
             color: "var(--accent-cyan)",
             opacity: bootLine3 ? 1 : 0,
-            transform: bootLine3 ? "translateX(0)" : "translateX(-6px)",
+            transform: bootLine3 ? "translateX(0)" : "translateX(-8px)",
           }}
         >
           ⟶ Channel secure · Outer Rim Division
@@ -141,40 +141,43 @@ export default function Home() {
           Taco Hunt // SLO
         </p>
 
-        {/* Holopuck taco */}
-        <div style={{ animation: "hologram-pulse 3s ease-in-out infinite" }}>
-          <Image
-            src="/images/holopuck-taco.png"
-            alt="Holographic taco"
-            width={220}
-            height={220}
-            priority
-            style={{ mixBlendMode: "screen" }}
-          />
-        </div>
+        {/* Holopuck + title as one visual unit */}
+        <div className="flex flex-col items-center gap-4">
+          <div className="hologram-pulse" style={{ animation: "hologram-pulse 3s ease-in-out infinite" }}>
+            <Image
+              src="/images/holopuck-taco.png"
+              alt="Holographic taco"
+              width={220}
+              height={220}
+              priority
+              className="w-[220px] h-[220px] md:w-[280px] md:h-[280px]"
+              style={{ mixBlendMode: "screen" }}
+            />
+          </div>
 
-        {/* Hero title + subtitle */}
-        <div className="flex flex-col gap-3 items-center">
-          <h1
-            className="text-[52px] md:text-[64px] leading-none font-bold transition-colors duration-500"
-            style={{
-              fontFamily: "Fraunces, serif",
-              color: heroTitleFlash ? "var(--accent-cyan)" : "var(--foreground)",
-            }}
-          >
-            {heroTitle}
-          </h1>
-          <p
-            className="text-[18px] font-light italic text-gold"
-            style={{ fontFamily: "Fraunces, serif", minHeight: "1.4em" }}
-          >
-            {subtitle}
-          </p>
-        </div>
+          {/* Hero title + subtitle */}
+          <div className="flex flex-col gap-3 items-center">
+            <h1
+              className="text-[52px] md:text-[64px] leading-none font-bold transition-colors duration-500"
+              style={{
+                fontFamily: "Fraunces, serif",
+                color: heroTitleFlash ? "var(--accent-cyan)" : "var(--foreground)",
+              }}
+            >
+              {heroTitle}
+            </h1>
+            <p
+              className="text-[18px] font-light italic text-gold"
+              style={{ fontFamily: "Fraunces, serif", minHeight: "1.4em" }}
+            >
+              {subtitle}
+            </p>
+          </div>
+        </div>{/* end holopuck + title unit */}
 
         {/* Mission brief terminal */}
         <div
-          className="w-full rounded-[3px] border bg-background px-4 py-3 text-left transition-all duration-400"
+          className="w-full rounded-[3px] border bg-background px-4 py-4 text-left transition-all duration-400"
           style={{
             borderColor: "var(--border-strong)",
             fontFamily: "var(--font-mono)",

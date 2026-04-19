@@ -68,6 +68,7 @@ body::before {
   .pulse-ring { animation: none; }
   .animate-fade-in-up { animation: none; }
   .cursor-blink { animation: none; opacity: 1; }
+  .hologram-pulse { animation: none; }
 }
 
 /* Identity reveal animation */
