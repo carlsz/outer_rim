@@ -48,6 +48,9 @@ jobs:
           docker push $IMAGE
           echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
+      - name: Deploy Firestore rules + indexes
+        run: npx firebase-tools@15 deploy --only firestore:rules,firestore:indexes --project ${{ env.PROJECT_ID }} --non-interactive
+
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy ${{ env.SERVICE }} \
