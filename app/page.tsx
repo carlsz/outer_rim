@@ -200,24 +200,28 @@ export default function Home() {
               <span className="inline-block w-[7px] h-[13px] bg-cyan ml-[2px] align-middle cursor-blink" />
             )}
           </p>
-        </div>
 
-        {/* CTA */}
-        <div
-          className="w-full transition-all duration-300"
-          style={{
-            opacity: stage === "cta" ? 1 : 0,
-            transform: stage === "cta" ? "translateY(0)" : "translateY(4px)",
-          }}
-        >
-          <Link
-            href="/hunt/may5-2026"
-            className="w-full flex items-center justify-center gap-2 h-12 rounded-[5px] text-[12px] font-medium tracking-[0.25em] uppercase text-background bg-gold transition-opacity hover:opacity-90 active:opacity-80"
-            style={{ fontFamily: "var(--font-mono)" }}
+          {/* CTA — inside the terminal box */}
+          <div
+            className="w-full mt-4 transition-all duration-300"
+            style={{
+              opacity: stage === "cta" ? 1 : 0,
+              transform: stage === "cta" ? "translateY(0)" : "translateY(4px)",
+            }}
           >
-            <span>⟶</span>
-            <span>Initiate Sequence</span>
-          </Link>
+            <Link
+              href="/hunt/may5-2026"
+              className="w-full flex items-center justify-center gap-2 h-12 rounded-[3px] text-[12px] font-medium tracking-[0.25em] uppercase transition-opacity hover:opacity-90 active:opacity-80"
+              style={{
+                fontFamily: "var(--font-mono)",
+                backgroundColor: "var(--accent-cyan)",
+                color: "var(--background)",
+              }}
+            >
+              <span>⟶</span>
+              <span>Initiate Sequence</span>
+            </Link>
+          </div>
         </div>
 
         {/* Divider + footer */}
