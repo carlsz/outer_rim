@@ -9,7 +9,7 @@ type Stage = "hero" | "scrambling" | "typing" | "boot-terminal" | "brief" | "typ
 
 const SUBTITLE = "The Kessel Run, SLO edition.";
 const BRIEF =
-  "Eight real taco spots hidden across San Luis Obispo, each disguised as a Star Wars cantina. Unlock stops one by one. Earn your trail card. Achieve leaderboard glory.";
+  "Eight real taco spots hidden across San Luis Obispo, each disguised as a Star Wars cantina. Unlock stops one by one. Earn your trail card. Achieve leaderboard glory. All in celebration of Cinco de Mayo and Revenge of the Fifth.";
 
 export default function Home() {
   const [bootLine1, setBootLine1] = useState(false);
