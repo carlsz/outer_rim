@@ -32,8 +32,7 @@ npm run dev     # http://localhost:3000
 
 **Useful commands:**
 ```bash
-npm install -g firebase-tools            # one-time: install Firebase CLI
-firebase deploy --only firestore:rules,firestore:indexes  # deploy rules + indexes (required before each prod push)
+npm install -g firebase-tools            # one-time: install Firebase CLI (for local rule testing)
 npm run seed:demo                        # seed 4 demo participants for the leaderboard
 npm run build                            # type-check + production build (runs in CI)
 ```

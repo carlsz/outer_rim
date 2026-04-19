@@ -20,12 +20,3 @@ Deferred from the May 5 build. These were explicitly out of scope for the demo.
 - **Real-time hunter GPS tracking** — Show each hunter's location on the map.
   Requires geolocation permission + Firestore writes per hunter. Significant privacy UX work.
 
-## Infrastructure
-
-- **Google Maps API key domain restriction** — Restrict the Maps key to the Cloud Run domain in GCP Console.
-  Must happen before May 5 demo. Do NOT restrict during dev (blocks localhost).
-
-- **Firestore rules + indexes deploy** — Deploy before Cloud Run goes live.
-  Requires Firebase CLI (`npm install -g firebase-tools`), then:
-  `firebase deploy --only firestore:rules,firestore:indexes`
-  The composite index (claimedCount DESC + joinedAt ASC) was created via the console link from the error log but should be in the deploy for repeatability.
