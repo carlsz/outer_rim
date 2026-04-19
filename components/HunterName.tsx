@@ -44,7 +44,7 @@ export default function HunterName({ uid, huntId, onJoined }: Props) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
       <div
         className="w-full max-w-sm rounded-2xl border p-8"
         style={{
