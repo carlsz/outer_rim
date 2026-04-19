@@ -37,7 +37,7 @@ export default function AdminTriggerPage() {
       <div className="w-full max-w-[420px] flex flex-col gap-6">
         <div>
           <p
-            className="text-[11px] tracking-[0.2em] uppercase text-imperial mb-2"
+            className="text-[12px] tracking-[0.2em] uppercase text-imperial mb-2"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             Admin · Imperial Trigger
@@ -56,7 +56,7 @@ export default function AdminTriggerPage() {
 
         <div className="flex flex-col gap-2">
           <label
-            className="text-[11px] tracking-[0.15em] uppercase text-foreground-muted"
+            className="text-[12px] tracking-[0.15em] uppercase text-foreground-muted"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             Hunt ID
@@ -86,7 +86,7 @@ export default function AdminTriggerPage() {
         {navigatorUrl && (
           <div className="rounded-[5px] border border-success/40 bg-success/5 px-4 py-4 flex flex-col gap-3">
             <p
-              className="text-[11px] tracking-[0.2em] uppercase text-success"
+              className="text-[12px] tracking-[0.2em] uppercase text-success"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               Navigator URL generated

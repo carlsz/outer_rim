@@ -46,7 +46,7 @@ export function ClueTerminal({ clue, loading, decoded, onTransmissionDecoded }: 
       style={{ fontFamily: "var(--font-mono)" }}
     >
       <p
-        className="text-[11px] tracking-[0.2em] uppercase mb-2 transition-colors duration-300"
+        className="text-[12px] tracking-[0.2em] uppercase mb-2 transition-colors duration-300"
         style={{ color: labelColor }}
       >
         {label}

@@ -90,13 +90,13 @@ export function StopCard({
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <span
-              className="text-[11px] tracking-[0.2em] uppercase text-foreground-muted"
+              className="text-[12px] tracking-[0.2em] uppercase text-foreground-muted"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               Stop {String(stopNumber).padStart(2, "0")}
             </span>
             <span
-              className="text-[11px] tracking-[0.15em] uppercase text-foreground-muted"
+              className="text-[12px] tracking-[0.15em] uppercase text-foreground-muted"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               ▪ locked
@@ -124,17 +124,17 @@ export function StopCard({
           {/* Stop label row */}
           <div className="flex items-center gap-2">
             <span
-              className="text-[11px] tracking-[0.2em] uppercase text-foreground-muted"
+              className="text-[12px] tracking-[0.2em] uppercase text-foreground-muted"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               Stop {String(stopNumber).padStart(2, "0")}
             </span>
             {isCompleted && (
-              <span className="text-[11px] tracking-[0.15em] uppercase text-success" style={{ fontFamily: "var(--font-mono)" }}>✓ Complete</span>
+              <span className="text-[12px] tracking-[0.15em] uppercase text-success" style={{ fontFamily: "var(--font-mono)" }}>✓ Complete</span>
             )}
             {isActive && (
               <span
-                className="text-[11px] tracking-[0.15em] uppercase text-gold"
+                className="text-[12px] tracking-[0.15em] uppercase text-gold"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 active
@@ -144,7 +144,7 @@ export function StopCard({
 
           {/* SW alias */}
           <h2
-            className="text-[16px] font-bold text-foreground leading-snug"
+            className="text-[16px] md:text-[18px] font-bold text-foreground leading-snug"
             style={{ fontFamily: "Fraunces, serif" }}
           >
             {spot.swAlias}
@@ -162,13 +162,13 @@ export function StopCard({
         <div className="flex flex-col items-end gap-1 shrink-0">
           <div className="flex items-center gap-2">
             <span
-              className="text-[10px] tracking-[0.15em] uppercase text-foreground-muted"
+              className="text-[12px] tracking-[0.15em] uppercase text-foreground-muted"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               Spice
             </span>
             <span
-              className="text-[11px] text-foreground-muted transition-transform duration-200"
+              className="text-[12px] text-foreground-muted transition-transform duration-200"
               style={{
                 fontFamily: "var(--font-mono)",
                 display: "inline-block",
@@ -220,7 +220,7 @@ export function StopCard({
           <div className="overflow-hidden">
             <button
               onClick={handleDecode}
-              className="mt-3 w-full flex items-center justify-center gap-2 py-2 rounded-[3px] text-[11px] tracking-[0.2em] uppercase hover:opacity-80 active:opacity-60"
+              className="mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-[3px] text-[12px] tracking-[0.2em] uppercase hover:opacity-80 active:opacity-60"
               style={{
                 fontFamily: "var(--font-mono)",
                 color: "var(--accent-gold)",
@@ -246,7 +246,7 @@ export function StopCard({
         >
           <div>
             <p
-              className="text-[10px] tracking-[0.15em] uppercase text-foreground-muted mb-1"
+              className="text-[12px] tracking-[0.15em] uppercase text-foreground-muted mb-1"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               Identity confirmed
@@ -293,7 +293,7 @@ export function StopCard({
           <button
             onClick={onClaim}
             disabled={claimLoading}
-            className="w-full py-2.5 rounded-[3px] text-[11px] tracking-[0.2em] uppercase font-medium transition-opacity disabled:opacity-50 active:opacity-70"
+            className="w-full py-2.5 rounded-[3px] text-[12px] tracking-[0.2em] uppercase font-medium transition-opacity disabled:opacity-50 active:opacity-70"
             style={{
               fontFamily: "var(--font-mono)",
               background: "#4ade80",
@@ -304,7 +304,7 @@ export function StopCard({
             {claimLoading ? "Verifying location…" : "✓ I'm here — Claim this stop"}
           </button>
           {claimError && (
-            <p className="text-[11px] text-center" style={{ fontFamily: "var(--font-mono)", color: "#ef4444" }}>
+            <p className="text-[12px] text-center" style={{ fontFamily: "var(--font-mono)", color: "#ef4444" }}>
               {claimError}
             </p>
           )}
@@ -326,7 +326,7 @@ export function StopCard({
               {/* Full address */}
               <div>
                 <p
-                  className="text-[10px] tracking-[0.15em] uppercase text-foreground-muted mb-1"
+                  className="text-[12px] tracking-[0.15em] uppercase text-foreground-muted mb-1"
                   style={{ fontFamily: "var(--font-mono)" }}
                 >
                   Location
@@ -338,7 +338,7 @@ export function StopCard({
               {isCompleted && clue && (
                 <div>
                   <p
-                    className="text-[10px] tracking-[0.15em] uppercase text-foreground-muted mb-1"
+                    className="text-[12px] tracking-[0.15em] uppercase text-foreground-muted mb-1"
                     style={{ fontFamily: "var(--font-mono)" }}
                   >
                     Transmission

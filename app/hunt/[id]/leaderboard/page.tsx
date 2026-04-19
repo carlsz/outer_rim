@@ -29,14 +29,14 @@ export default function LeaderboardPage({
       <header className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
         <Link href={`/hunt/${id}`}>
           <span
-            className="text-[11px] tracking-[0.2em] uppercase text-gold"
+            className="text-[12px] tracking-[0.2em] uppercase text-gold"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             ← Back to Hunt
           </span>
         </Link>
         <span
-          className="text-[11px] tracking-[0.2em] uppercase text-foreground-muted"
+          className="text-[12px] tracking-[0.2em] uppercase text-foreground-muted"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Leaderboard

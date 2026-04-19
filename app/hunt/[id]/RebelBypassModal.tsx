@@ -89,7 +89,7 @@ export function RebelBypassModal({
         <button
           onClick={handleAdvance}
           disabled={advancing}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-[3px] text-[11px] tracking-[0.2em] uppercase transition-opacity hover:opacity-80 active:opacity-60 disabled:opacity-40 disabled:cursor-default"
+          className="w-full flex items-center justify-center gap-2 py-3 rounded-[3px] text-[12px] tracking-[0.2em] uppercase transition-opacity hover:opacity-80 active:opacity-60 disabled:opacity-40 disabled:cursor-default"
           style={{
             fontFamily: "var(--font-mono)",
             color: "var(--accent-imperial, #ef4444)",

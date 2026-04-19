@@ -187,7 +187,7 @@ export default function HuntPage({
     return (
       <div className="flex flex-col min-h-screen items-center justify-center px-6 gap-4">
         <p
-          className="text-[11px] tracking-[0.2em] uppercase text-imperial"
+          className="text-[12px] tracking-[0.2em] uppercase text-imperial"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Hunt not found
@@ -209,7 +209,7 @@ export default function HuntPage({
       <div className="flex flex-col min-h-screen items-center justify-center gap-3">
         <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin" />
         <p
-          className="text-[11px] tracking-[0.2em] uppercase text-foreground-muted"
+          className="text-[12px] tracking-[0.2em] uppercase text-foreground-muted"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Loading mission data…
@@ -261,10 +261,10 @@ export default function HuntPage({
       )}
 
       {/* Header */}
-      <header className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
+      <header className="flex items-center justify-between px-4 md:px-8 py-3 border-b border-border shrink-0">
         <Link href="/">
           <span
-            className="text-[11px] tracking-[0.2em] uppercase text-gold"
+            className="text-[12px] tracking-[0.2em] uppercase text-gold"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             Outer Rim
@@ -273,14 +273,14 @@ export default function HuntPage({
         <div className="flex items-center gap-3">
           {participant ? (
             <span
-              className="text-[11px] tracking-[0.15em] uppercase text-foreground"
+              className="text-[12px] tracking-[0.15em] uppercase text-foreground"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               {Math.min(hunterClaimedCount, hunt.stops.length)}/{hunt.stops.length} claimed
             </span>
           ) : (
             <span
-              className="text-[11px] tracking-[0.15em] uppercase text-foreground"
+              className="text-[12px] tracking-[0.15em] uppercase text-foreground"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               {hunt.unlockedCount}/{hunt.stops.length} stops
@@ -288,7 +288,7 @@ export default function HuntPage({
           )}
           <button
             onClick={() => setShowLeaderboard((x) => !x)}
-            className="text-foreground-muted hover:text-gold transition-colors"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-foreground-muted hover:text-gold transition-colors"
             aria-label="Leaderboard"
           >
             <Trophy size={16} />
@@ -296,7 +296,7 @@ export default function HuntPage({
           {isDev && !hunterComplete && (
             <button
               onClick={() => setBypassOpen(true)}
-              className="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef4444]"
+              className="min-w-[44px] min-h-[44px] flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef4444]"
               aria-label="Rebel bypass"
               style={{ color: "var(--accent-imperial, #ef4444)" }}
             >
@@ -305,7 +305,7 @@ export default function HuntPage({
           )}
           <button
             onClick={() => setInfoOpen(true)}
-            className="text-foreground-muted hover:text-foreground transition-colors"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-foreground-muted hover:text-foreground transition-colors"
             aria-label="How to play"
           >
             <Info size={16} />
@@ -341,7 +341,7 @@ export default function HuntPage({
             <span style={{ color: "#4ade80", fontSize: 18, lineHeight: 1 }}>✓</span>
             <div>
               <p
-                className="text-[10px] tracking-[0.2em] uppercase"
+                className="text-[12px] tracking-[0.2em] uppercase"
                 style={{ fontFamily: "var(--font-mono)", color: "#4ade80" }}
               >
                 Stop {String(stopNum).padStart(2, "0")} confirmed
@@ -365,7 +365,7 @@ export default function HuntPage({
           <div className="w-2 h-2 rounded-full bg-gold pulse-ring shrink-0" />
           <div className="flex-1 min-w-0">
             <p
-              className="text-[11px] tracking-[0.15em] uppercase text-gold"
+              className="text-[12px] tracking-[0.15em] uppercase text-gold"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               Navigator unlock requested
@@ -383,7 +383,7 @@ export default function HuntPage({
           <span className="text-success text-lg">✓</span>
           <div className="flex-1 min-w-0">
             <p
-              className="text-[11px] tracking-[0.15em] uppercase text-success"
+              className="text-[12px] tracking-[0.15em] uppercase text-success"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               Kessel Run complete
@@ -410,7 +410,7 @@ export default function HuntPage({
         <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none z-[100] bg-gradient-to-t from-background to-transparent" />
         <button
           onClick={() => setMapExpanded((x) => !x)}
-          className="absolute bottom-3 left-3 z-[101] flex items-center gap-1.5 px-2.5 py-1.5 rounded-[3px] text-[10px] tracking-[0.15em] uppercase transition-opacity hover:opacity-90 active:opacity-70"
+          className="absolute bottom-3 left-3 z-[101] flex items-center gap-1.5 px-2.5 py-1.5 rounded-[3px] text-[12px] tracking-[0.15em] uppercase transition-opacity hover:opacity-90 active:opacity-70"
           style={{
             fontFamily: "var(--font-mono)",
             background: "rgba(10,11,13,0.72)",
@@ -432,8 +432,8 @@ export default function HuntPage({
       />
 
       {/* Stop list */}
-      <div className="flex-1 overflow-y-auto px-4 pb-8 pt-3">
-        <div className="max-w-[480px] mx-auto flex flex-col gap-2">
+      <div className="flex-1 overflow-y-auto px-4 md:px-8 pb-8 pt-3">
+        <div className="max-w-[480px] md:max-w-[580px] mx-auto flex flex-col gap-2">
           {sortedSpots.map(({ spot, originalIndex }) => {
             const isHunterClaimed = participant
               ? participant.claimedSpots.includes(spot.id)

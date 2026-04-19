@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { scrambleReveal } from "@/lib/scramble";
 
@@ -90,7 +91,7 @@ export default function Home() {
         }}
       >
         <p
-          className="text-[11px] tracking-[0.2em] uppercase transition-all duration-200"
+          className="text-[12px] tracking-[0.2em] uppercase transition-all duration-200"
           style={{
             fontFamily: "var(--font-mono)",
             color: "var(--accent-gold)",
@@ -101,7 +102,7 @@ export default function Home() {
           ⟶ Establishing secure channel...
         </p>
         <p
-          className="text-[11px] tracking-[0.2em] uppercase transition-all duration-200"
+          className="text-[12px] tracking-[0.2em] uppercase transition-all duration-200"
           style={{
             fontFamily: "var(--font-mono)",
             color: "var(--accent-gold)",
@@ -112,7 +113,7 @@ export default function Home() {
           ⟶ Signal acquired
         </p>
         <p
-          className="text-[11px] tracking-[0.2em] uppercase transition-all duration-200"
+          className="text-[12px] tracking-[0.2em] uppercase transition-all duration-200"
           style={{
             fontFamily: "var(--font-mono)",
             color: "var(--accent-cyan)",
@@ -126,7 +127,7 @@ export default function Home() {
 
       {/* Hero */}
       <div
-        className="w-full max-w-[480px] flex flex-col items-center gap-8 text-center transition-all duration-500"
+        className="w-full max-w-[480px] md:max-w-[580px] flex flex-col items-center gap-8 text-center transition-all duration-500"
         style={{
           opacity: heroVisible ? 1 : 0,
           transform: heroVisible ? "translateY(0)" : "translateY(10px)",
@@ -134,16 +135,28 @@ export default function Home() {
       >
         {/* Eyebrow */}
         <p
-          className="text-[11px] tracking-[0.25em] uppercase text-gold"
+          className="text-[12px] tracking-[0.25em] uppercase text-gold"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Taco Hunt // SLO
         </p>
 
+        {/* Holopuck taco */}
+        <div style={{ animation: "hologram-pulse 3s ease-in-out infinite" }}>
+          <Image
+            src="/images/holopuck-taco.png"
+            alt="Holographic taco"
+            width={220}
+            height={220}
+            priority
+            style={{ mixBlendMode: "screen" }}
+          />
+        </div>
+
         {/* Hero title + subtitle */}
         <div className="flex flex-col gap-3 items-center">
           <h1
-            className="text-[52px] leading-none font-bold transition-colors duration-500"
+            className="text-[52px] md:text-[64px] leading-none font-bold transition-colors duration-500"
             style={{
               fontFamily: "Fraunces, serif",
               color: heroTitleFlash ? "var(--accent-cyan)" : "var(--foreground)",
@@ -173,7 +186,7 @@ export default function Home() {
           }}
         >
           <p
-            className="text-[10px] tracking-[0.2em] uppercase mb-3"
+            className="text-[12px] tracking-[0.2em] uppercase mb-3"
             style={{ color: "var(--accent-cyan)" }}
           >
             Mission Parameters
@@ -196,7 +209,7 @@ export default function Home() {
         >
           <Link
             href="/hunt/may5-2026"
-            className="w-full flex items-center justify-center gap-2 h-12 rounded-[5px] text-[11px] font-medium tracking-[0.25em] uppercase text-background bg-gold transition-opacity hover:opacity-90 active:opacity-80"
+            className="w-full flex items-center justify-center gap-2 h-12 rounded-[5px] text-[12px] font-medium tracking-[0.25em] uppercase text-background bg-gold transition-opacity hover:opacity-90 active:opacity-80"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             <span>⟶</span>
@@ -211,7 +224,7 @@ export default function Home() {
         >
           <div className="w-full border-t border-border" />
           <p
-            className="text-[11px] tracking-[0.15em] uppercase text-foreground-muted"
+            className="text-[12px] tracking-[0.15em] uppercase text-foreground-muted"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             San Luis Obispo · May 5, 2026

@@ -67,14 +67,14 @@ export default async function HunterCrawlPage({
       <header className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
         <Link href={`/hunt/${huntId}`}>
           <span
-            className="text-[11px] tracking-[0.2em] uppercase text-gold"
+            className="text-[12px] tracking-[0.2em] uppercase text-gold"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             ← Hunt
           </span>
         </Link>
         <span
-          className="text-[11px] tracking-[0.15em] uppercase text-foreground-muted"
+          className="text-[12px] tracking-[0.15em] uppercase text-foreground-muted"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Trail Card
@@ -96,7 +96,7 @@ export default async function HunterCrawlPage({
         {/* Hunter info */}
         <div className="flex flex-col gap-1">
           <p
-            className="text-[11px] tracking-[0.2em] uppercase"
+            className="text-[12px] tracking-[0.2em] uppercase"
             style={{ fontFamily: "var(--font-mono)", color: "#c9a84c" }}
           >
             Hunter
@@ -106,14 +106,14 @@ export default async function HunterCrawlPage({
           </p>
           {participant.completedAt ? (
             <p
-              className="text-[11px] tracking-[0.2em] uppercase text-success"
+              className="text-[12px] tracking-[0.2em] uppercase text-success"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               ✓ Kessel Run complete · {new Date(participant.completedAt).toLocaleTimeString()}
             </p>
           ) : (
             <p
-              className="text-[11px] tracking-[0.2em] uppercase text-gold"
+              className="text-[12px] tracking-[0.2em] uppercase text-gold"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               {participant.claimedCount} of {huntData.stops.length} stops claimed
@@ -129,7 +129,7 @@ export default async function HunterCrawlPage({
               className="flex items-center gap-3 px-3 py-2 rounded-[3px] border border-border bg-surface"
             >
               <span
-                className="text-[11px] text-foreground-muted shrink-0"
+                className="text-[12px] text-foreground-muted shrink-0"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 {String(i + 1).padStart(2, "0")}

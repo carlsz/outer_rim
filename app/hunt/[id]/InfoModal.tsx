@@ -82,7 +82,7 @@ export function InfoModal({
           {STEPS.map((step) => (
             <li key={step.n} className="flex gap-4 items-start">
               <span
-                className="text-[11px] tracking-[0.2em] text-gold shrink-0 pt-[3px]"
+                className="text-[12px] tracking-[0.2em] text-gold shrink-0 pt-[3px]"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 {step.n}
@@ -101,7 +101,7 @@ export function InfoModal({
 
         {/* Bottom label */}
         <p
-          className="mt-8 text-[10px] tracking-[0.2em] uppercase text-foreground-muted text-center"
+          className="mt-8 text-[12px] tracking-[0.2em] uppercase text-foreground-muted text-center"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Outer Rim // SLO · May 5, 2026

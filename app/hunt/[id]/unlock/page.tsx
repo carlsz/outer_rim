@@ -78,7 +78,7 @@ function UnlockContent({ huntId }: { huntId: string }) {
       <div className="flex flex-col items-center gap-4 text-center">
         <span className="text-5xl text-success">✓</span>
         <p
-          className="text-[11px] tracking-[0.2em] uppercase text-success"
+          className="text-[12px] tracking-[0.2em] uppercase text-success"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Clearance granted
@@ -98,7 +98,7 @@ function UnlockContent({ huntId }: { huntId: string }) {
       <div className="flex flex-col items-center gap-4 text-center">
         <span className="text-4xl text-imperial">✕</span>
         <p
-          className="text-[11px] tracking-[0.2em] uppercase text-imperial"
+          className="text-[12px] tracking-[0.2em] uppercase text-imperial"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Request denied
@@ -124,7 +124,7 @@ function UnlockContent({ huntId }: { huntId: string }) {
         </div>
         <div>
           <p
-            className="text-[11px] tracking-[0.2em] uppercase text-foreground-muted mb-2"
+            className="text-[12px] tracking-[0.2em] uppercase text-foreground-muted mb-2"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             No pending request
@@ -155,7 +155,7 @@ function UnlockContent({ huntId }: { huntId: string }) {
 
       <div>
         <p
-          className="text-[11px] tracking-[0.2em] uppercase text-imperial mb-2"
+          className="text-[12px] tracking-[0.2em] uppercase text-imperial mb-2"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Imperial clearance required
@@ -211,14 +211,14 @@ export default function UnlockPage({
       <header className="flex items-center justify-between px-4 py-3 border-b border-border">
         <Link href={`/hunt/${id}`}>
           <span
-            className="text-[11px] tracking-[0.2em] uppercase text-gold"
+            className="text-[12px] tracking-[0.2em] uppercase text-gold"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             ← Hunt
           </span>
         </Link>
         <span
-          className="text-[11px] tracking-[0.15em] uppercase text-foreground-muted"
+          className="text-[12px] tracking-[0.15em] uppercase text-foreground-muted"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Navigator Unlock

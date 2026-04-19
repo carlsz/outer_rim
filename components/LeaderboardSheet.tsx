@@ -37,7 +37,7 @@ export function LeaderboardSheet({ open, onClose, huntId, totalStops, currentUid
 
       {/* Sheet */}
       <div
-        className={`relative w-full bg-surface rounded-t-2xl px-6 pt-8 pb-10 transition-transform duration-300 ease-out max-h-[70vh] flex flex-col ${
+        className={`relative w-full md:max-w-[580px] md:mx-auto md:rounded-2xl bg-surface rounded-t-2xl px-6 pt-8 pb-10 transition-transform duration-300 ease-out max-h-[70vh] flex flex-col ${
           open ? "translate-y-0" : "translate-y-full"
         }`}
       >
@@ -52,8 +52,8 @@ export function LeaderboardSheet({ open, onClose, huntId, totalStops, currentUid
           <div className="flex items-center gap-3">
             <Link
               href={`/hunt/${huntId}/leaderboard`}
-              className="text-[11px] tracking-[0.12em] uppercase"
-              style={{ color: "#6b7280", fontFamily: "var(--font-mono)" }}
+              className="text-[12px] tracking-[0.12em] uppercase"
+              style={{ color: "var(--foreground-muted)", fontFamily: "var(--font-mono)" }}
               onClick={onClose}
             >
               full view →

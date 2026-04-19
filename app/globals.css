@@ -6,7 +6,7 @@
   --surface: #12151a;
   --surface-elevated: #1c2028;
   --foreground: #e8dfc8;
-  --foreground-muted: #6b7280;
+  --foreground-muted: #878e9d; /* was #6b7280; ~6.0:1 on #0a0b0d, clears WCAG AA */
   --accent-gold: #c9a84c;
   --accent-cyan: #4db8c8;
   --accent-red: #ef4444;
@@ -64,6 +64,12 @@ body::before {
   animation: pulse-ring 1.5s ease-in-out infinite;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .pulse-ring { animation: none; }
+  .animate-fade-in-up { animation: none; }
+  .cursor-blink { animation: none; opacity: 1; }
+}
+
 /* Identity reveal animation */
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(8px); }
@@ -72,6 +78,12 @@ body::before {
 
 .animate-fade-in-up {
   animation: fade-in-up 0.35s ease-out both;
+}
+
+/* Holopuck float */
+@keyframes hologram-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.88; }
 }
 
 /* Terminal cursor blink */
