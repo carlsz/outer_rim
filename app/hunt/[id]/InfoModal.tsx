@@ -6,23 +6,23 @@ import { X } from "lucide-react";
 const STEPS = [
   {
     n: "01",
-    title: "Follow the clues",
-    body: "Each stop reveals a Star Wars–themed clue pointing to the next real taco spot in SLO.",
+    title: "Decode the transmission",
+    body: "Each stop hides a Star Wars–themed clue pointing to a real taco spot in SLO. Tap to decode it.",
   },
   {
     n: "02",
-    title: "Arrive at the location",
-    body: "Make your way to the spot. The map pin activates once you're confirmed nearby.",
+    title: "Get to the location",
+    body: "Follow the clue to the spot. Use the map or tap Get Directions on the stop card.",
   },
   {
     n: "03",
-    title: "Request unlock",
-    body: "Tap the stop card and submit for Navigator approval to mark it complete.",
+    title: "Claim the stop",
+    body: "Once you're there, tap Claim This Stop. Your location is verified automatically.",
   },
   {
     n: "04",
     title: "Earn your trail card",
-    body: "Finish all stops and unlock your collectible Outer Rim trail card.",
+    body: "Finish all eight stops and unlock your collectible Outer Rim trail card.",
   },
 ];
 
