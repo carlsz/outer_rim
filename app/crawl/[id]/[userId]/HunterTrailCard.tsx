@@ -18,6 +18,9 @@ export default function HunterTrailCard({ huntId, userId, hunterName }: Props) {
       navigator.share({
         title: `${hunterName}'s Outer Rim Trail Card`,
         url: shareUrl,
+      }).catch((err: unknown) => {
+        if (err instanceof DOMException && err.name === "AbortError") return;
+        throw err;
       });
     } else {
       navigator.clipboard.writeText(shareUrl);
