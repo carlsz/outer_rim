@@ -228,6 +228,21 @@ export default function HuntPage({
 
   const allSpots = hunt.stops.map((sid) => spotById[sid]).filter(Boolean) as TacoSpot[];
 
+  // Active stop first, then upcoming locked stops, then completed stops at the bottom
+  const sortedSpots = (() => {
+    const indexed = allSpots.map((spot, i) => ({ spot, originalIndex: i }));
+    const active = indexed.filter(({ spot }) => spot.id === hunterActiveSpotId && !hunterComplete);
+    const locked = indexed.filter(({ spot }) => {
+      const claimed = participant ? participant.claimedSpots.includes(spot.id) : false;
+      return spot.id !== hunterActiveSpotId && !claimed;
+    });
+    const completed = indexed.filter(({ spot }) => {
+      const claimed = participant ? participant.claimedSpots.includes(spot.id) : false;
+      return claimed;
+    });
+    return [...active, ...locked, ...completed];
+  })();
+
   // Map shows all stops so hunters can navigate; active pin is hunter's current target
   const mapVisibleSpots = participant
     ? (allSpots)
@@ -419,10 +434,10 @@ export default function HuntPage({
       {/* Stop list */}
       <div className="flex-1 overflow-y-auto px-4 pb-8 pt-3">
         <div className="max-w-[480px] mx-auto flex flex-col gap-2">
-          {allSpots.map((spot, i) => {
+          {sortedSpots.map(({ spot, originalIndex }) => {
             const isHunterClaimed = participant
               ? participant.claimedSpots.includes(spot.id)
-              : i < hunt.unlockedCount;
+              : originalIndex < hunt.unlockedCount;
             const isHunterActive = spot.id === hunterActiveSpotId && !hunterComplete;
             const isCompleted = isHunterClaimed && !isHunterActive;
             const isLocked = !isHunterClaimed && !isHunterActive;
@@ -433,7 +448,7 @@ export default function HuntPage({
               <div key={spot.id} ref={isHunterActive ? activeCardRef : undefined}>
                 <StopCard
                   spot={spot}
-                  stopNumber={i + 1}
+                  stopNumber={originalIndex + 1}
                   isActive={isHunterActive}
                   isCompleted={isCompleted}
                   isLocked={isLocked}
