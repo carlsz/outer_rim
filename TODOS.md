@@ -25,5 +25,7 @@ Deferred from the May 5 build. These were explicitly out of scope for the demo.
 - **Google Maps API key domain restriction** — Restrict the Maps key to the Cloud Run domain in GCP Console.
   Must happen before May 5 demo. Do NOT restrict during dev (blocks localhost).
 
-- **Firestore rules deploy** — Deploy `firestore.rules` before Cloud Run goes live.
-  Currently the rules file exists but must be deployed via `firebase deploy --only firestore:rules`.
+- **Firestore rules + indexes deploy** — Deploy before Cloud Run goes live.
+  Requires Firebase CLI (`npm install -g firebase-tools`), then:
+  `firebase deploy --only firestore:rules,firestore:indexes`
+  The composite index (claimedCount DESC + joinedAt ASC) was created via the console link from the error log but should be in the deploy for repeatability.

@@ -19,6 +19,7 @@ Hunt down the best tacos in San Luis Obispo — each stop disguised as a Star Wa
 + The Trail Card: satori renders a shareable OG image listing completed stops — the proof you survived the outer rim.
 + The Navigator Unlock: Human-in-the-loop approval via a token-gated URL to reveal the next stop on the map.
 + The Map: Full-width dark-style Google Map with expand/collapse (tap ↗ to grow to 70vh), pinned to active stop.
++ The Leaderboard: Real-time ranked list of hunters by stops claimed, surfaced as a bottom sheet. Full-page view at `/hunt/[id]/leaderboard`.
 
 ## Dev Setup
 
@@ -34,7 +35,8 @@ npm run dev     # http://localhost:3000
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
 - `FIREBASE_ADMIN_CREDENTIAL` — base64-encoded service account JSON (seed script + admin trigger)
 - `ANTHROPIC_API_KEY` — clue generator
-- `NEXT_PUBLIC_DEV_MODE=true` — enables force-advance dev button (omit in production)
+- `NEXT_PUBLIC_DEV_MODE=true` — shows force-advance button in UI (omit in production)
+- `DEV_MODE=true` — bypasses geo check server-side (omit in production)
 
 ## Agent Skills
 

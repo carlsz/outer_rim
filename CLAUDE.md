@@ -27,11 +27,14 @@ npm run dev     # http://localhost:3000
 - `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
 - `FIREBASE_ADMIN_CREDENTIAL` — base64-encoded service account JSON (seed script + admin trigger)
 - `ANTHROPIC_API_KEY` — clue generator
-- `NEXT_PUBLIC_DEV_MODE=true` — enables the Rebel Bypass (force-advance) button; omit or set false in production
+- `NEXT_PUBLIC_DEV_MODE=true` — shows the Rebel Bypass button in the client UI
+- `DEV_MODE=true` — bypasses geo validation in `/api/claim` and enables force-advance in `/api/unlock` (server-only, never set in production)
 
 **Useful commands:**
 ```bash
-firebase deploy --only firestore:rules   # deploy Firestore security rules (required before each prod push)
+npm install -g firebase-tools            # one-time: install Firebase CLI
+firebase deploy --only firestore:rules,firestore:indexes  # deploy rules + indexes (required before each prod push)
+npm run seed:demo                        # seed 4 demo participants for the leaderboard
 npm run build                            # type-check + production build (runs in CI)
 ```
 
