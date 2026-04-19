@@ -42,7 +42,7 @@ export function InfoModal({
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-end transition-all duration-300 ${
+      className={`fixed inset-0 z-[200] flex items-end transition-all duration-300 ${
         open ? "pointer-events-auto" : "pointer-events-none"
       }`}
     >

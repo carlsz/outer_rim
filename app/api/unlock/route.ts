@@ -15,7 +15,7 @@ export async function POST(req: Request) {
   }
 
   // force-advance is dev-only
-  if (action === "force" && process.env.NEXT_PUBLIC_DEV_MODE !== "true") {
+  if (action === "force" && process.env.DEV_MODE !== "true") {
     return Response.json({ error: "forbidden" }, { status: 403 });
   }
 

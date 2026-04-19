@@ -14,6 +14,9 @@ interface StopCardProps {
   isLoadingClue?: boolean;
   alreadyDecoded?: boolean;
   onDecoded?: () => void;
+  onClaim?: () => void;
+  claimLoading?: boolean;
+  claimError?: string | null;
 }
 
 const SPICE_DOTS = ["·", "·", "·", "·", "·"];
@@ -61,6 +64,9 @@ export function StopCard({
   isLoadingClue,
   alreadyDecoded,
   onDecoded,
+  onClaim,
+  claimLoading,
+  claimError,
 }: StopCardProps) {
   const shortAddr = spot.address.split(",")[0];
 
@@ -302,6 +308,34 @@ export function StopCard({
           >
             ⟶ Get Directions
           </a>
+
+        </div>
+      )}
+
+      {/* Claim button — only after transmission is decoded and identity revealed */}
+      {isActive && onClaim && decoded && transmissionReady && (
+        <div
+          className="mt-3 flex flex-col gap-1"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            onClick={onClaim}
+            disabled={claimLoading}
+            className="w-full py-2.5 rounded-[3px] text-[11px] tracking-[0.2em] uppercase font-medium transition-opacity disabled:opacity-50 active:opacity-70"
+            style={{
+              fontFamily: "var(--font-mono)",
+              background: "#4ade80",
+              color: "#0a0b0d",
+              border: "none",
+            }}
+          >
+            {claimLoading ? "Verifying location…" : "✓ I'm here — Claim this stop"}
+          </button>
+          {claimError && (
+            <p className="text-[11px] text-center" style={{ fontFamily: "var(--font-mono)", color: "#ef4444" }}>
+              {claimError}
+            </p>
+          )}
         </div>
       )}
 

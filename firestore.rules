@@ -14,5 +14,11 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
+
+    // participants subcollection — public read for leaderboard; server-only writes
+    match /hunts/{huntId}/participants/{userId} {
+      allow read: if true;
+      allow write: if false;
+    }
   }
 }

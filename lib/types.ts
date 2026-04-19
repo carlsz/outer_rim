@@ -27,3 +27,19 @@ export interface Hunt {
   /** Structural shape shared by firebase/firestore and firebase-admin Timestamp */
   createdAt: { seconds: number; nanoseconds: number } | Date;
 }
+
+export interface Participant {
+  name: string;
+  claimedSpots: string[];
+  claimedCount: number;
+  joinedAt: { seconds: number; nanoseconds: number };
+  completedAt?: { seconds: number; nanoseconds: number };
+}
+
+export interface SerializedParticipant {
+  name: string;
+  claimedSpots: string[];
+  claimedCount: number;
+  joinedAt: number;
+  completedAt?: number;
+}

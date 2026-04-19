@@ -3,14 +3,18 @@
 import { use, useEffect, useRef, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import Link from "next/link";
-import { ArrowBigRightDash, Info } from "lucide-react";
+import { ArrowBigRightDash, Info, Trophy } from "lucide-react";
 import { db } from "@/lib/firebase";
+import { getIdToken } from "@/lib/auth";
 import { Hunt, TacoSpot } from "@/lib/types";
 import tacoSpots from "@/tacoSpots.json";
 import { HuntMap } from "./HuntMap";
 import { StopCard } from "./StopCard";
 import { InfoModal } from "./InfoModal";
 import { RebelBypassModal } from "./RebelBypassModal";
+import HunterName from "@/components/HunterName";
+import { LeaderboardSheet } from "@/components/LeaderboardSheet";
+import { useHunterAuth } from "@/hooks/useHunterAuth";
 
 const ALL_SPOTS: TacoSpot[] = tacoSpots as TacoSpot[];
 const spotById = Object.fromEntries(ALL_SPOTS.map((s) => [s.id, s]));
@@ -29,10 +33,15 @@ export default function HuntPage({
   const [forceAdvancing, setForceAdvancing] = useState(false);
   const [bypassOpen, setBypassOpen] = useState(false);
   const [mapExpanded, setMapExpanded] = useState(false);
+  const [claimLoading, setClaimLoading] = useState(false);
+  const [claimError, setClaimError] = useState<string | null>(null);
+  const [showLeaderboard, setShowLeaderboard] = useState(false);
   const decodedSpots = useRef<Set<string>>(new Set());
   const requestedClues = useRef<Set<string>>(new Set());
   const activeCardRef = useRef<HTMLDivElement>(null);
   const hasScrolled = useRef(false);
+
+  const { uid, participant, loading: authLoading, needsName } = useHunterAuth(id);
 
   // Real-time hunt listener
   useEffect(() => {
@@ -62,15 +71,15 @@ export default function HuntPage({
     }, 300);
   }, [hunt]);
 
-  // Fetch and cache clue whenever a new stop is unlocked
+  // Fetch and cache clue for the hunter's current active stop
   useEffect(() => {
     if (!hunt) return;
-    const activeIndex = hunt.unlockedCount - 1;
+    const activeIndex = participant
+      ? participant.claimedSpots.length
+      : hunt.unlockedCount - 1;
     const activeSpotId = hunt.stops[activeIndex];
     if (!activeSpotId) return;
-    // Already have the clue in Firestore
     if (hunt.clues?.[activeSpotId]) return;
-    // Already requested this clue in this session
     if (requestedClues.current.has(activeSpotId)) return;
 
     requestedClues.current.add(activeSpotId);
@@ -94,7 +103,81 @@ export default function HuntPage({
       })
       .catch((err) => console.error("[clue] fetch error:", err))
       .finally(() => setClueLoading(false));
-  }, [hunt, id]);
+  }, [hunt, id, participant?.claimedSpots.length]);
+
+  async function claimStop(spotId: string) {
+    if (!uid || claimLoading) return;
+    setClaimLoading(true);
+    setClaimError(null);
+
+    try {
+      const token = await getIdToken();
+
+      let lat: number | undefined;
+      let lng: number | undefined;
+
+      if (!isDev) {
+        const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            timeout: 10000,
+            maximumAge: 0,
+            enableHighAccuracy: true,
+          });
+        }).catch((err: GeolocationPositionError) => {
+          if (err.code === GeolocationPositionError.PERMISSION_DENIED) {
+            throw new Error("Location access denied — enable in browser settings");
+          }
+          throw new Error("GPS timed out — try again");
+        });
+        lat = position.coords.latitude;
+        lng = position.coords.longitude;
+      }
+
+      const res = await fetch("/api/claim", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ huntId: id, spotId, lat, lng }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error ?? "Claim failed");
+      }
+    } catch (err) {
+      setClaimError(err instanceof Error ? err.message : "Claim failed");
+    } finally {
+      setClaimLoading(false);
+    }
+  }
+
+  async function forceAdvance() {
+    if (!hunt || forceAdvancing || hunt.status === "complete") return;
+    setForceAdvancing(true);
+    try {
+      // Advance the individual hunter's claimedSpots
+      const activeIndex = participant ? participant.claimedSpots.length : hunt.unlockedCount - 1;
+      const activeSpotId = hunt.stops[activeIndex];
+      if (activeSpotId && uid) {
+        const token = await getIdToken();
+        await fetch("/api/claim", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ huntId: id, spotId: activeSpotId }),
+        });
+      }
+      // Also advance the global navigator panel
+      await fetch("/api/unlock", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ huntId: id, action: "force" }),
+      });
+    } finally {
+      setForceAdvancing(false);
+    }
+  }
 
   if (notFound) {
     return (
@@ -117,7 +200,7 @@ export default function HuntPage({
     );
   }
 
-  if (!hunt) {
+  if (!hunt || authLoading) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center gap-3">
         <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin" />
@@ -131,32 +214,33 @@ export default function HuntPage({
     );
   }
 
-  const unlockedSpots = hunt.stops
-    .slice(0, hunt.unlockedCount)
-    .map((sid) => spotById[sid])
-    .filter(Boolean) as TacoSpot[];
+  // Per-hunter stop states — fall back to hunt.unlockedCount if no participant yet
+  const hunterClaimedCount = participant?.claimedSpots.length ?? 0;
+  const hunterActiveIndex = participant ? hunterClaimedCount : hunt.unlockedCount - 1;
+  const hunterActiveSpotId = hunt.stops[hunterActiveIndex] ?? null;
+  const hunterComplete = participant
+    ? participant.claimedSpots.length >= hunt.stops.length
+    : hunt.status === "complete";
 
   const allSpots = hunt.stops.map((sid) => spotById[sid]).filter(Boolean) as TacoSpot[];
 
-  const activeSpotId = hunt.stops[hunt.unlockedCount - 1] ?? null;
-  const isComplete = hunt.status === "complete";
-
-  async function forceAdvance() {
-    if (!hunt || forceAdvancing || isComplete) return;
-    setForceAdvancing(true);
-    try {
-      await fetch("/api/unlock", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ huntId: id, action: "force" }),
-      });
-    } finally {
-      setForceAdvancing(false);
-    }
-  }
+  // Map shows all stops so hunters can navigate; active pin is hunter's current target
+  const mapVisibleSpots = participant
+    ? (allSpots)
+    : hunt.stops.slice(0, hunt.unlockedCount).map((sid) => spotById[sid]).filter(Boolean) as TacoSpot[];
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
+      {needsName && uid && (
+        <HunterName
+          uid={uid}
+          huntId={id}
+          onJoined={() => {
+            // participant doc created — useHunterAuth onSnapshot will fire and update state
+          }}
+        />
+      )}
+
       {/* Header */}
       <header className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
         <Link href="/">
@@ -168,13 +252,29 @@ export default function HuntPage({
           </span>
         </Link>
         <div className="flex items-center gap-3">
-          <span
-            className="text-[11px] tracking-[0.15em] uppercase text-foreground"
-            style={{ fontFamily: "var(--font-mono)" }}
+          {participant ? (
+            <span
+              className="text-[11px] tracking-[0.15em] uppercase text-foreground"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              {hunterClaimedCount}/{hunt.stops.length} claimed
+            </span>
+          ) : (
+            <span
+              className="text-[11px] tracking-[0.15em] uppercase text-foreground"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              {hunt.unlockedCount}/{hunt.stops.length} stops
+            </span>
+          )}
+          <button
+            onClick={() => setShowLeaderboard((x) => !x)}
+            className="text-foreground-muted hover:text-gold transition-colors"
+            aria-label="Leaderboard"
           >
-            {hunt.unlockedCount}/{hunt.stops.length} stops
-          </span>
-          {isDev && !isComplete && (
+            <Trophy size={16} />
+          </button>
+          {isDev && !hunterComplete && (
             <button
               onClick={() => setBypassOpen(true)}
               className="transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ef4444]"
@@ -193,6 +293,7 @@ export default function HuntPage({
           </button>
         </div>
       </header>
+
       <RebelBypassModal
         open={bypassOpen}
         onClose={() => setBypassOpen(false)}
@@ -203,8 +304,8 @@ export default function HuntPage({
       />
       <InfoModal open={infoOpen} onClose={() => setInfoOpen(false)} />
 
-      {/* Pending unlock banner */}
-      {hunt.pendingStop !== null && (
+      {/* Navigator pending unlock banner (guided mode only) */}
+      {hunt.pendingStop !== null && !participant && (
         <div className="px-4 py-3 border-b border-gold/40 bg-gold/5 flex items-center gap-3">
           <div className="w-2 h-2 rounded-full bg-gold pulse-ring shrink-0" />
           <div className="flex-1 min-w-0">
@@ -221,8 +322,8 @@ export default function HuntPage({
         </div>
       )}
 
-      {/* Complete banner */}
-      {isComplete && (
+      {/* Hunter complete banner */}
+      {hunterComplete && participant && (
         <div className="px-4 py-3 border-b border-success/40 bg-success/5 flex items-center gap-3">
           <span className="text-success text-lg">✓</span>
           <div className="flex-1 min-w-0">
@@ -233,7 +334,7 @@ export default function HuntPage({
               Kessel Run complete
             </p>
             <Link
-              href={`/crawl/${id}`}
+              href={`/crawl/${id}/${uid}`}
               className="text-[12px] text-gold underline"
             >
               View your trail card →
@@ -250,10 +351,8 @@ export default function HuntPage({
           transition: "height 0.4s ease-out",
         }}
       >
-        <HuntMap spots={unlockedSpots} activeSpotId={activeSpotId} />
-        {/* Gradient fade — always visible to blend map into cards */}
+        <HuntMap spots={mapVisibleSpots} activeSpotId={hunterActiveSpotId} />
         <div className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none z-[100] bg-gradient-to-t from-background to-transparent" />
-        {/* Expand / collapse affordance — bottom-left to avoid Google zoom controls */}
         <button
           onClick={() => setMapExpanded((x) => !x)}
           className="absolute bottom-3 left-3 z-[101] flex items-center gap-1.5 px-2.5 py-1.5 rounded-[3px] text-[10px] tracking-[0.15em] uppercase transition-opacity hover:opacity-90 active:opacity-70"
@@ -269,26 +368,42 @@ export default function HuntPage({
         </button>
       </div>
 
+      <LeaderboardSheet
+        open={showLeaderboard}
+        onClose={() => setShowLeaderboard(false)}
+        huntId={id}
+        totalStops={hunt.stops.length}
+        currentUid={uid}
+      />
+
       {/* Stop list */}
-      <div className="flex-1 overflow-y-auto px-4 pb-8 pt-2 -mt-2">
+      <div className="flex-1 overflow-y-auto px-4 pb-8 pt-3">
         <div className="max-w-[480px] mx-auto flex flex-col gap-2">
           {allSpots.map((spot, i) => {
-            const isUnlocked = i < hunt.unlockedCount;
-            const isActive = spot.id === activeSpotId && !isComplete;
-            const isCompleted = isUnlocked && !isActive;
-            const isLocked = !isUnlocked;
+            const isHunterClaimed = participant
+              ? participant.claimedSpots.includes(spot.id)
+              : i < hunt.unlockedCount;
+            const isHunterActive = spot.id === hunterActiveSpotId && !hunterComplete;
+            const isCompleted = isHunterClaimed && !isHunterActive;
+            const isLocked = !isHunterClaimed && !isHunterActive;
+
+            const canClaim = isHunterActive && !!participant;
+
             return (
-              <div key={spot.id} ref={isActive ? activeCardRef : undefined}>
+              <div key={spot.id} ref={isHunterActive ? activeCardRef : undefined}>
                 <StopCard
                   spot={spot}
                   stopNumber={i + 1}
-                  isActive={isActive}
+                  isActive={isHunterActive}
                   isCompleted={isCompleted}
                   isLocked={isLocked}
                   clue={hunt.clues?.[spot.id]}
-                  isLoadingClue={isActive && clueLoading}
+                  isLoadingClue={isHunterActive && clueLoading}
                   alreadyDecoded={decodedSpots.current.has(spot.id)}
                   onDecoded={() => { decodedSpots.current.add(spot.id); }}
+                  onClaim={canClaim ? () => claimStop(spot.id) : undefined}
+                  claimLoading={claimLoading}
+                  claimError={isHunterActive ? claimError : null}
                 />
               </div>
             );

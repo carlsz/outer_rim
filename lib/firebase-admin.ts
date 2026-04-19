@@ -26,4 +26,15 @@ export function getAdminDb(): admin.firestore.Firestore {
   return admin.firestore();
 }
 
+export async function verifyAuthToken(req: Request): Promise<string> {
+  initAdmin();
+  const authHeader = req.headers.get("Authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    throw new Response("Unauthorized", { status: 401 });
+  }
+  const token = authHeader.slice(7);
+  const decoded = await admin.auth().verifyIdToken(token);
+  return decoded.uid;
+}
+
 export { admin };

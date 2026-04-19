@@ -7,8 +7,10 @@ Deferred from the May 5 build. These were explicitly out of scope for the demo.
 - **Multi-hunt admin dashboard** — UI to create, list, and manage multiple hunt documents.
   Firestore schema already supports multiple hunts (`hunts/{id}`); this is purely a UI + auth layer.
 
-- **Team race / tournament mode** — Two teams race to unlock all stops. Live leaderboard.
-  Requires per-team hunt docs, score calculation, and a leaderboard page. Full Approach C from the design doc.
+- **Team race / tournament mode** — Two teams race across the hunt. Per-team scoring and leaderboard.
+  Individual user leaderboard is now built (participants subcollection, real-time Leaderboard component,
+  `/hunt/[id]/leaderboard` page, `/crawl/[id]/[userId]` per-hunter trail card). What remains for team mode
+  is grouping hunters into teams, per-team score aggregation, and a team-vs-team leaderboard view.
 
 ## Mobile / offline
 
