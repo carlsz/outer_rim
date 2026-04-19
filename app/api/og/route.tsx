@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+import fs from "fs";
+import path from "path";
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import { getFrauncesFont } from "@/lib/fonts";
@@ -22,15 +24,19 @@ export async function GET(req: NextRequest) {
     return new NextResponse("Font unavailable", { status: 503 });
   }
 
+  const medalBuffer = fs.readFileSync(path.join(process.cwd(), "public/images/medal.png"));
+  const medalSrc = `data:image/png;base64,${medalBuffer.toString("base64")}`;
+
   const svg = await satori(
     <div
       style={{
         display: "flex",
         flexDirection: "column",
+        justifyContent: "space-between",
         width: "1200px",
         height: "630px",
         background: "#0a0b0d",
-        padding: "64px",
+        padding: "48px",
         fontFamily: "Fraunces",
         position: "relative",
       }}
@@ -57,160 +63,140 @@ export async function GET(req: NextRequest) {
         }}
       />
 
-      {/* Header row */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          marginBottom: "40px",
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "Fraunces",
-            fontSize: "13px",
-            color: "#c9a84c",
-            letterSpacing: "0.2em",
-            textTransform: "uppercase",
-          }}
-        >
-          OUTER RIM // TACO HUNT
-        </div>
-        <div
-          style={{
-            fontFamily: "Fraunces",
-            fontSize: "13px",
-            color: "#6b7280",
-            letterSpacing: "0.1em",
-          }}
-        >
-          SAN LUIS OBISPO
-        </div>
-      </div>
+      {/* Main content row */}
+      <div style={{ display: "flex", flexDirection: "row", flex: 1, gap: "56px", alignItems: "stretch" }}>
 
-      {/* Title */}
-      <div
-        style={{
-          fontFamily: "Fraunces",
-          fontSize: "80px",
-          fontWeight: 700,
-          color: "#e8dfc8",
-          lineHeight: 1.0,
-          marginBottom: "16px",
-          maxWidth: "800px",
-        }}
-      >
-        {title}
-      </div>
-
-      {/* Subtitle */}
-      <div
-        style={{
-          fontFamily: "Fraunces",
-          fontSize: "22px",
-          fontWeight: 400,
-          fontStyle: "italic",
-          color: "#c9a84c",
-          marginBottom: "40px",
-        }}
-      >
-        {subtitle}
-      </div>
-
-      {/* Stop list */}
-      {stops.length > 0 && (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "10px",
-            marginBottom: "auto",
-          }}
-        >
-          {stops.slice(0, 5).map((stop, i) => (
+        {/* Left: title+subtitle, stops grid, footer info */}
+        <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
+          {/* Top block: title + subtitle grouped */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             <div
-              key={i}
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "14px",
+                fontFamily: "Fraunces",
+                fontSize: "84px",
+                fontWeight: 700,
+                color: "#e8dfc8",
+                lineHeight: 1.0,
+                whiteSpace: "nowrap",
               }}
             >
-              <div
-                style={{
-                  width: "7px",
-                  height: "7px",
-                  borderRadius: "50%",
-                  background: "#c9a84c",
-                  flexShrink: 0,
-                }}
-              />
+              {title}
+            </div>
+            <div
+              style={{
+                fontFamily: "Fraunces",
+                fontSize: "36px",
+                fontWeight: 400,
+                fontStyle: "italic",
+                color: "#c9a84c",
+              }}
+            >
+              {subtitle}
+            </div>
+          </div>
+
+          {/* Bottom block: stops anchored to bottom */}
+          {stops.length > 0 && (
+            <div style={{ display: "flex", flexDirection: "column", marginTop: "auto" }}>
               <div
                 style={{
                   fontFamily: "Fraunces",
-                  fontSize: "18px",
-                  color: "#e8dfc8",
-                  fontWeight: 400,
+                  fontSize: "14px",
+                  color: "#4db8c8",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  marginBottom: "14px",
                 }}
               >
-                {stop}
+                STOPS COMPLETED
+              </div>
+              {/* Two-column grid */}
+              <div style={{ display: "flex", flexDirection: "row", gap: "32px" }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {stops.slice(0, Math.ceil(stops.length / 2)).map((stop, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <div
+                        style={{
+                          width: "6px",
+                          height: "6px",
+                          borderRadius: "50%",
+                          background: "#c9a84c",
+                          flexShrink: 0,
+                        }}
+                      />
+                      <div
+                        style={{
+                          fontFamily: "Fraunces",
+                          fontSize: "20px",
+                          color: "#e8dfc8",
+                          fontWeight: 400,
+                        }}
+                      >
+                        {stop}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                  {stops.slice(Math.ceil(stops.length / 2)).map((stop, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                      <div
+                        style={{
+                          width: "6px",
+                          height: "6px",
+                          borderRadius: "50%",
+                          background: "#c9a84c",
+                          flexShrink: 0,
+                        }}
+                      />
+                      <div
+                        style={{
+                          fontFamily: "Fraunces",
+                          fontSize: "20px",
+                          color: "#e8dfc8",
+                          fontWeight: 400,
+                        }}
+                      >
+                        {stop}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
-          ))}
+          )}
         </div>
-      )}
 
-      {/* Footer */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-          borderTop: "1px solid rgba(201,168,76,0.15)",
-          paddingTop: "20px",
-          marginTop: "32px",
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "Fraunces",
-            fontSize: "16px",
-            color: "#c9a84c",
-            letterSpacing: "0.1em",
-            fontWeight: 700,
-          }}
-        >
-          KESSEL RUN COMPLETE
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-end",
-            gap: "4px",
-          }}
-        >
-          <div
-            style={{
-              fontFamily: "Fraunces",
-              fontSize: "15px",
-              color: "#e8dfc8",
-              fontWeight: 700,
-            }}
-          >
-            {hunter}
+        {/* Right: medal + hunter name grouped top, meta bottom */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "space-between" }}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "14px" }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={medalSrc} width={312} height={312} alt="" />
+            <div
+              style={{
+                fontFamily: "Fraunces",
+                fontSize: "26px",
+                color: "#e8dfc8",
+                fontWeight: 700,
+                textAlign: "center",
+              }}
+            >
+              {hunter}
+            </div>
           </div>
           <div
             style={{
               fontFamily: "Fraunces",
               fontSize: "13px",
               color: "#6b7280",
+              letterSpacing: "0.05em",
+              textAlign: "center",
             }}
           >
-            {date}
+            {`slotacohunt.com · San Luis Obispo, CA · ${date}`}
           </div>
         </div>
+
       </div>
     </div>,
     {
