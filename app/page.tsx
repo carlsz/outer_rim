@@ -1,57 +1,222 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { scrambleReveal } from "@/lib/scramble";
+
+type Stage = "boot" | "hero" | "scrambling" | "typing" | "brief" | "typing-brief" | "cta";
+
+const SUBTITLE = "The Kessel Run, SLO edition.";
+const BRIEF =
+  "Eight real taco spots hidden across San Luis Obispo, each disguised as a Star Wars cantina. Unlock stops one by one. Earn your trail card. Achieve leaderboard glory.";
 
 export default function Home() {
+  const [bootLine1, setBootLine1] = useState(false);
+  const [bootLine2, setBootLine2] = useState(false);
+  const [bootLine3, setBootLine3] = useState(false);
+  const [bootVisible, setBootVisible] = useState(true);
+  const [heroVisible, setHeroVisible] = useState(false);
+  const [heroTitle, setHeroTitle] = useState("\u00a0");
+  const [heroTitleFlash, setHeroTitleFlash] = useState(false);
+  const [subtitle, setSubtitle] = useState("");
+  const [briefText, setBriefText] = useState("");
+  const [briefDone, setBriefDone] = useState(false);
+  const [stage, setStage] = useState<Stage>("boot");
+
+  useEffect(() => {
+    const t1 = setTimeout(() => setBootLine1(true), 150);
+    const t2 = setTimeout(() => setBootLine2(true), 600);
+    const t3 = setTimeout(() => setBootLine3(true), 1000);
+
+    const tHero = setTimeout(() => {
+      setBootVisible(false);
+      setTimeout(() => setHeroVisible(true), 100);
+
+      setTimeout(() => {
+        setStage("scrambling");
+        scrambleReveal("Outer Rim", setHeroTitle, () => {
+          setHeroTitleFlash(true);
+          setTimeout(() => setHeroTitleFlash(false), 500);
+
+          setTimeout(() => {
+            setStage("typing");
+            let i = 0;
+            const subtitleId = setInterval(() => {
+              i++;
+              setSubtitle(SUBTITLE.slice(0, i));
+              if (i >= SUBTITLE.length) {
+                clearInterval(subtitleId);
+                setTimeout(() => {
+                  setStage("brief");
+                  setTimeout(() => {
+                    setStage("typing-brief");
+                    let j = 0;
+                    const briefId = setInterval(() => {
+                      j++;
+                      setBriefText(BRIEF.slice(0, j));
+                      if (j >= BRIEF.length) {
+                        clearInterval(briefId);
+                        setBriefDone(true);
+                        setTimeout(() => setStage("cta"), 300);
+                      }
+                    }, 18);
+                  }, 150);
+                }, 200);
+              }
+            }, 40);
+          }, 150);
+        });
+      }, 300);
+    }, 1500);
+
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(tHero);
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col min-h-screen bg-background items-center justify-center px-6">
-      <div className="w-full max-w-[480px] flex flex-col items-center gap-8 text-center">
+    <div className="flex flex-col min-h-screen bg-background items-center justify-center px-6 relative overflow-hidden">
+      {/* Boot screen */}
+      <div
+        className="absolute inset-0 flex flex-col items-center justify-center gap-3 transition-opacity duration-400"
+        style={{
+          opacity: bootVisible ? 1 : 0,
+          pointerEvents: bootVisible ? "auto" : "none",
+          zIndex: 10,
+          background: "var(--background)",
+        }}
+      >
+        <p
+          className="text-[11px] tracking-[0.2em] uppercase transition-all duration-200"
+          style={{
+            fontFamily: "var(--font-mono)",
+            color: "var(--accent-gold)",
+            opacity: bootLine1 ? 1 : 0,
+            transform: bootLine1 ? "translateX(0)" : "translateX(-6px)",
+          }}
+        >
+          ⟶ Establishing secure channel...
+        </p>
+        <p
+          className="text-[11px] tracking-[0.2em] uppercase transition-all duration-200"
+          style={{
+            fontFamily: "var(--font-mono)",
+            color: "var(--accent-gold)",
+            opacity: bootLine2 ? 1 : 0,
+            transform: bootLine2 ? "translateX(0)" : "translateX(-6px)",
+          }}
+        >
+          ⟶ Signal acquired
+        </p>
+        <p
+          className="text-[11px] tracking-[0.2em] uppercase transition-all duration-200"
+          style={{
+            fontFamily: "var(--font-mono)",
+            color: "var(--accent-cyan)",
+            opacity: bootLine3 ? 1 : 0,
+            transform: bootLine3 ? "translateX(0)" : "translateX(-6px)",
+          }}
+        >
+          ⟶ Channel secure · Outer Rim Division
+        </p>
+      </div>
+
+      {/* Hero */}
+      <div
+        className="w-full max-w-[480px] flex flex-col items-center gap-8 text-center transition-all duration-500"
+        style={{
+          opacity: heroVisible ? 1 : 0,
+          transform: heroVisible ? "translateY(0)" : "translateY(10px)",
+        }}
+      >
         {/* Eyebrow */}
         <p
-          className="text-[11px] tracking-[0.25em] uppercase text-gold font-mono"
+          className="text-[11px] tracking-[0.25em] uppercase text-gold"
           style={{ fontFamily: "var(--font-mono)" }}
         >
           Taco Hunt // SLO
         </p>
 
-        {/* Hero title */}
-        <div className="flex flex-col gap-3">
+        {/* Hero title + subtitle */}
+        <div className="flex flex-col gap-3 items-center">
           <h1
-            className="text-[52px] leading-none font-bold text-foreground"
-            style={{ fontFamily: "Fraunces, serif" }}
+            className="text-[52px] leading-none font-bold transition-colors duration-500"
+            style={{
+              fontFamily: "Fraunces, serif",
+              color: heroTitleFlash ? "var(--accent-cyan)" : "var(--foreground)",
+            }}
           >
-            Outer Rim
+            {heroTitle}
           </h1>
           <p
             className="text-[18px] font-light italic text-gold"
-            style={{ fontFamily: "Fraunces, serif" }}
+            style={{ fontFamily: "Fraunces, serif", minHeight: "1.4em" }}
           >
-            The Kessel Run, SLO edition.
+            {subtitle}
           </p>
         </div>
 
-        {/* Description */}
-        <p className="text-[15px] leading-relaxed text-foreground-muted max-w-[340px]">
-          Eight real taco spots hidden across San Luis Obispo, each disguised as
-          a Star Wars cantina. Unlock stops one by one. Earn your trail card.
-        </p>
+        {/* Mission brief terminal */}
+        <div
+          className="w-full rounded-[3px] border bg-background px-4 py-3 text-left transition-all duration-400"
+          style={{
+            borderColor: "var(--border-strong)",
+            fontFamily: "var(--font-mono)",
+            opacity: stage === "brief" || stage === "typing-brief" || stage === "cta" ? 1 : 0,
+            transform:
+              stage === "brief" || stage === "typing-brief" || stage === "cta"
+                ? "translateY(0)"
+                : "translateY(4px)",
+          }}
+        >
+          <p
+            className="text-[10px] tracking-[0.2em] uppercase mb-3"
+            style={{ color: "var(--accent-cyan)" }}
+          >
+            Mission Parameters
+          </p>
+          <p className="text-[13px] leading-relaxed text-foreground-muted">
+            {briefText}
+            {!briefDone && stage === "typing-brief" && (
+              <span className="inline-block w-[7px] h-[13px] bg-cyan ml-[2px] align-middle cursor-blink" />
+            )}
+          </p>
+        </div>
 
         {/* CTA */}
-        <Link
-          href="/hunt/may5-2026"
-          className="w-full flex items-center justify-center h-12 rounded-[5px] text-[14px] font-semibold tracking-wide text-background bg-gold transition-opacity hover:opacity-90 active:opacity-80"
+        <div
+          className="w-full transition-all duration-300"
+          style={{
+            opacity: stage === "cta" ? 1 : 0,
+            transform: stage === "cta" ? "translateY(0)" : "translateY(4px)",
+          }}
         >
-          Begin the Hunt
-        </Link>
+          <Link
+            href="/hunt/may5-2026"
+            className="w-full flex items-center justify-center gap-2 h-12 rounded-[5px] text-[11px] font-medium tracking-[0.25em] uppercase text-background bg-gold transition-opacity hover:opacity-90 active:opacity-80"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            <span>⟶</span>
+            <span>Initiate Sequence</span>
+          </Link>
+        </div>
 
-        {/* Divider */}
-        <div className="w-full border-t border-border" />
-
-        {/* Footer label */}
-        <p
-          className="text-[11px] tracking-[0.15em] uppercase text-foreground-muted"
-          style={{ fontFamily: "var(--font-mono)" }}
+        {/* Divider + footer */}
+        <div
+          className="w-full flex flex-col gap-4 transition-opacity duration-400"
+          style={{ opacity: stage === "cta" ? 1 : 0 }}
         >
-          San Luis Obispo · May 5, 2026
-        </p>
+          <div className="w-full border-t border-border" />
+          <p
+            className="text-[11px] tracking-[0.15em] uppercase text-foreground-muted"
+            style={{ fontFamily: "var(--font-mono)" }}
+          >
+            San Luis Obispo · May 5, 2026
+          </p>
+        </div>
       </div>
     </div>
   );

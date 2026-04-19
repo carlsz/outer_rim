@@ -62,6 +62,34 @@
 - **Terminal cursor:** 1s step-end blink
 - **Easing defaults:** enter(ease-out) exit(ease-in) move(ease-in-out)
 
+## Landing Page
+
+The landing page is the first frame of the transmission. It runs a sequential animation on load — the full sequence takes ~4 seconds before the CTA is interactive. This is intentional: users are entering something, not scanning a page.
+
+### Boot Sequence (0ms → 1400ms)
+Three lines appear sequentially in JetBrains Mono, uppercase. Then fade out.
+- 150ms: `⟶ ESTABLISHING SECURE CHANNEL...` (gold)
+- 600ms: `⟶ SIGNAL ACQUIRED` (gold)
+- 1000ms: `⟶ CHANNEL SECURE · OUTER RIM DIVISION` (cyan)
+- 1500ms: boot screen fades (400ms), hero container slides up (8px, 500ms ease-out)
+
+### Hero Reveal (1700ms → ~2500ms)
+- "Outer Rim" scramble-reveals via `lib/scramble.ts` (`SCRAMBLE_CHARS`, 35ms/frame, 3 frames per character lock)
+- On title complete: brief cyan flash (color transition 500ms ease-out back to foreground)
+- 150ms after title locks: subtitle typewriters in at 40ms/char
+
+### Mission Brief Terminal (~2700ms → 3200ms)
+Styled identically to ClueTerminal (`bg-background`, border-strong, JetBrains Mono). Replaces prose paragraph. Header: "MISSION PARAMETERS" in cyan. Four rows: OBJECTIVE, PROTOCOL, REWARD, DATE.
+
+### CTA (~3700ms)
+- Copy: "⟶ INITIATE SEQUENCE" (not "Begin the Hunt")
+- Style: gold bg, rounded-[5px], JetBrains Mono, tracking-widest, 11px uppercase
+- Fades + slides up (4px, 300ms) after mission brief appears
+
+### Copy decisions
+- Eyebrow: "Taco Hunt // SLO" — keeps meta context
+- Footer: "San Luis Obispo · May 5, 2026"
+
 ## Decisions Log
 | Date | Decision | Rationale |
 |------|----------|-----------|
@@ -70,3 +98,6 @@
 | 2026-04-14 | JetBrains Mono for AI clue text | Clues are transmissions. Typewriter reveal with monospace is the product's hero moment. Keep clues short. |
 | 2026-04-14 | Dark-mode-only (no light mode) | Google Maps dark style is already in the stack. Committing fully produces a coherent visual system rather than a half-dark compromise. |
 | 2026-04-14 | Intentional decoration (scanlines, glow) | Subtle scanline texture + CRT glow anchor the retro-futurist aesthetic without becoming fan art. |
+| 2026-04-19 | Mission terminal boot sequence on landing | Landing page is the first frame of the transmission. 1.4s boot stall is intentional — signals "you are entering something." |
+| 2026-04-19 | "INITIATE SEQUENCE" CTA copy | Coherence: the entire landing is framed as receiving a mission. "Begin the Hunt" breaks that frame. |
+| 2026-04-19 | Mission brief terminal replaces prose | Parameters > paragraph. Terminal format puts users inside the world immediately. |

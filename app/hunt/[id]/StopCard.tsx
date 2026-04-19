@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { TacoSpot } from "@/lib/types";
 import { ClueTerminal } from "./ClueTerminal";
+import { SCRAMBLE_CHARS, scrambleReveal } from "@/lib/scramble";
 
 interface StopCardProps {
   spot: TacoSpot;
@@ -20,38 +21,9 @@ interface StopCardProps {
 }
 
 const SPICE_DOTS = ["·", "·", "·", "·", "·"];
-const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@!%▓░▒";
 
 function mapsUrl(spot: TacoSpot) {
   return `https://www.google.com/maps/dir/?api=1&destination=${spot.lat},${spot.lng}`;
-}
-
-function scrambleReveal(
-  target: string,
-  setter: (s: string) => void,
-  onDone?: () => void
-) {
-  const len = target.length;
-  let frame = 0;
-  const totalFrames = len * 3;
-  const id = setInterval(() => {
-    frame++;
-    const locked = Math.floor(frame / 3);
-    const display = target
-      .split("")
-      .map((ch, i) => {
-        if (i < locked) return ch;
-        if (ch === " " || ch === "·" || ch === ",") return ch;
-        return SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)];
-      })
-      .join("");
-    setter(display);
-    if (locked >= len) {
-      clearInterval(id);
-      setter(target);
-      onDone?.();
-    }
-  }, 35);
 }
 
 export function StopCard({
