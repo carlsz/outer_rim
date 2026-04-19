@@ -35,6 +35,7 @@ export default function HuntPage({
   const [mapExpanded, setMapExpanded] = useState(false);
   const [claimLoading, setClaimLoading] = useState(false);
   const [claimError, setClaimError] = useState<string | null>(null);
+  const [claimSuccessSpotId, setClaimSuccessSpotId] = useState<string | null>(null);
   const [showLeaderboard, setShowLeaderboard] = useState(false);
   const decodedSpots = useRef<Set<string>>(new Set());
   const requestedClues = useRef<Set<string>>(new Set());
@@ -146,6 +147,9 @@ export default function HuntPage({
         const data = await res.json();
         throw new Error(data.error ?? "Claim failed");
       }
+
+      setClaimSuccessSpotId(spotId);
+      setTimeout(() => setClaimSuccessSpotId(null), 3000);
     } catch (err) {
       setClaimError(err instanceof Error ? err.message : "Claim failed");
     } finally {
@@ -257,7 +261,7 @@ export default function HuntPage({
               className="text-[11px] tracking-[0.15em] uppercase text-foreground"
               style={{ fontFamily: "var(--font-mono)" }}
             >
-              {hunterClaimedCount}/{hunt.stops.length} claimed
+              {Math.min(hunterClaimedCount, hunt.stops.length)}/{hunt.stops.length} claimed
             </span>
           ) : (
             <span
@@ -303,6 +307,42 @@ export default function HuntPage({
         totalStops={hunt.stops.length}
       />
       <InfoModal open={infoOpen} onClose={() => setInfoOpen(false)} />
+
+      {/* Claim success toast */}
+      {claimSuccessSpotId && (() => {
+        const claimedSpot = allSpots.find(s => s.id === claimSuccessSpotId);
+        const stopNum = hunt.stops.indexOf(claimSuccessSpotId) + 1;
+        return (
+          <div
+            className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[300] animate-fade-in-up px-5 py-3 rounded-[5px] flex items-center gap-3 pointer-events-none"
+            style={{
+              background: "#12151a",
+              border: "1px solid rgba(74,222,128,0.4)",
+              boxShadow: "0 0 20px rgba(74,222,128,0.15)",
+              minWidth: "240px",
+              maxWidth: "calc(100vw - 32px)",
+            }}
+          >
+            <span style={{ color: "#4ade80", fontSize: 18, lineHeight: 1 }}>✓</span>
+            <div>
+              <p
+                className="text-[10px] tracking-[0.2em] uppercase"
+                style={{ fontFamily: "var(--font-mono)", color: "#4ade80" }}
+              >
+                Stop {String(stopNum).padStart(2, "0")} confirmed
+              </p>
+              {claimedSpot && (
+                <p
+                  className="text-[13px] text-foreground leading-snug mt-0.5"
+                  style={{ fontFamily: "Fraunces, serif" }}
+                >
+                  {claimedSpot.swAlias}
+                </p>
+              )}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Navigator pending unlock banner (guided mode only) */}
       {hunt.pendingStop !== null && !participant && (
