@@ -14,13 +14,6 @@ This app is a creative exploration of AI-native development, designed as a live 
 + Sharable Trail Cards: Generates a shareable "proof of completion" (using satori) once a player finishes the "Kessel Run" of taco joints
 + Real-time Leaderboard: A real-time ranked list of "hunters" based on stops claimed
 
-## Technical Stack
-+ Framework: React/Next.js (Tailwind CSS)
-+ Data Source: tacoSpots.json (real SLO taco spots with Star Wars aliases)
-+ Orchestration Layer: gstack / Claude Code
-+ Verification Logic: Token-gated Navigator Unlock for revealing the next stop
-+ Deployment: Cloud Run
-
 ## Core Demo Loops
 + The Clue Generator: Claude writes a riddle-style clue for each taco stop based on its hint keywords, revealed after the player decodes the transmission.
 + The Decode Flow: Players tap "Decode Transmission" to trigger the clue typewriter; once complete, the stop identity scramble-reveals with a cyan flash.
@@ -28,6 +21,13 @@ This app is a creative exploration of AI-native development, designed as a live 
 + The Navigator Unlock: Human-in-the-loop approval via a token-gated URL to reveal the next stop on the map.
 + The Map: Full-width dark-style Google Map with expand/collapse (tap ↗ to grow to 70vh), pinned to active stop.
 + The Leaderboard: Real-time ranked list of hunters by stops claimed, surfaced as a bottom sheet. Full-page view at `/hunt/[id]/leaderboard`.
+
+## Technical Stack
++ Framework: React/Next.js (Tailwind CSS)
++ Data Source: tacoSpots.json (real SLO taco spots with Star Wars aliases)
++ Orchestration Layer: gstack / Claude Code
++ Verification Logic: Token-gated Navigator Unlock for revealing the next stop
++ Deployment: Cloud Run
 
 ## Dev Setup
 
