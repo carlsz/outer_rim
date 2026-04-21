@@ -3,8 +3,8 @@ Target Build Date: May 5, 2026 (Revenge of the 5th)<br/>
 Status: Taco Scavenger Hunt App<br/>
 Domain: [slotacohunt.com](https://slotacohunt.com)
 
-## Vision
-Hunt down the best tacos in San Luis Obispo — each stop disguised as a Star Wars cantina. Scan a QR code to unlock your next clue, collect all stops, and earn a shareable trail card proving you made the Kessel Run of SLO taco joints.
+## Brief
+This app is a creative exploration of AI-native development, designed as a live demonstration for a talk I’m giving on May 5th at my alma mater, Cal Poly SLO. The experience ties together 2 different themes of [Cinco de Mayo](https://en.wikipedia.org/wiki/Cinco_de_Mayo) and [Revenge of the Fifth](https://en.wikipedia.org/wiki/Star_Wars_Day). By gamifying a local taco scavenger hunt through the lens of a Star Wars "Outer Rim" mission, the project serves as a practical testing ground for modern engineering workflows. It specifically showcases a production-ready CI/CD pipeline using GitHub Actions, containerized deployment to Google Cloud Run, and the integration of AI agents (like Claude and Garry Tan’s [gstack](https://github.com/garrytan/gstack)) to handle everything from automated riddle generation to UI audits, proving how developers can leverage these tools to rapidly build and iterate on interactive, real-world experiences.
 
 ## Technical Stack
 + Framework: React/Next.js (Tailwind CSS)
