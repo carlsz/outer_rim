@@ -6,6 +6,14 @@ Domain: [slotacohunt.com](https://slotacohunt.com)
 ## Brief
 This app is a creative exploration of AI-native development, designed as a live demonstration for a talk I’m giving on May 5th at my alma mater, Cal Poly SLO. The experience ties together 2 different themes of [Cinco de Mayo](https://en.wikipedia.org/wiki/Cinco_de_Mayo) and [Revenge of the Fifth](https://en.wikipedia.org/wiki/Star_Wars_Day). By gamifying a local taco scavenger hunt through the lens of a Star Wars "Outer Rim" mission, the project serves as a practical testing ground for modern engineering workflows. It specifically showcases a production-ready CI/CD pipeline using GitHub Actions, containerized deployment to Google Cloud Run, and the integration of AI agents (like Claude and Garry Tan’s [gstack](https://github.com/garrytan/gstack)) to handle everything from automated riddle generation to UI audits, proving how developers can leverage these tools to rapidly build and iterate on interactive, real-world experiences.
 
+## Key Features
++ Themed Scavenger Hunt: Players hunt for real-world taco spots in San Luis Obispo that have been given Star Wars-inspired aliases (e.g., local restaurants disguised as "cantinas").
++ Clue System: Uses a "Clue Generator" (powered by Claude/AI) to write riddle-style clues for each location. Players "decode transmissions" to reveal their next stop.
++ Location & Token Verification: Progress is tracked via proximity scans at physical locations. 
++ Interactive Map: A custom dark-themed Google Map that pins the active stop and expands/collapses for navigation
++ Sharable Trail Cards: Generates a shareable "proof of completion" (using satori) once a player finishes the "Kessel Run" of taco joints
++ Real-time Leaderboard: A real-time ranked list of "hunters" based on stops claimed
+
 ## Technical Stack
 + Framework: React/Next.js (Tailwind CSS)
 + Data Source: tacoSpots.json (real SLO taco spots with Star Wars aliases)
