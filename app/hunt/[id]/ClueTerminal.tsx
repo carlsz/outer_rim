@@ -28,7 +28,7 @@ export function ClueTerminal({ clue, loading, decoded, onTransmissionDecoded }: 
       }
     }, 40);
     return () => clearInterval(id);
-  }, [clue, decoded]);
+  }, [clue, decoded]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const label = !decoded
     ? "Intercepted Transmission"

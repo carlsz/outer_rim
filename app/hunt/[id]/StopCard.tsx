@@ -53,7 +53,9 @@ export function StopCard({
   // Scramble-reveal the name/address once the clue typewriter finishes
   useEffect(() => {
     if (!transmissionReady || alreadyDecoded) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisplayName(spot.name.replace(/[^ ]/g, () => SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]));
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisplayAddr(shortAddr.replace(/[^ ]/g, () => SCRAMBLE_CHARS[Math.floor(Math.random() * SCRAMBLE_CHARS.length)]));
     let namesDone = false;
     let addrDone = false;
@@ -198,7 +200,7 @@ export function StopCard({
         className="mt-2 text-[12px] italic text-foreground-muted"
         style={{ fontFamily: "Fraunces, serif" }}
       >
-        "{spot.tagline}"
+        {'"'}{spot.tagline}{'"'}
       </p>
 
       {/* Clue terminal — active stop only, always visible */}
