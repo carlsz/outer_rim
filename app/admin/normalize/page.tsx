@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { getIdToken } from "@/lib/auth";
 import type { NormalizedItem } from "@/app/api/normalize/route";
 
 type Mode = "text" | "photo";
@@ -46,11 +47,12 @@ export default function NormalizePage() {
         : { text };
 
     try {
+      const token = await getIdToken();
       const res = await fetch("/api/normalize", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-admin-key": process.env.NEXT_PUBLIC_ADMIN_KEY ?? "",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(body),
       });
