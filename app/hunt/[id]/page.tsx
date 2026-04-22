@@ -3,7 +3,9 @@
 import { use, useEffect, useRef, useState } from "react";
 import { doc, onSnapshot } from "firebase/firestore";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowBigRightDash, Info, Trophy } from "lucide-react";
+
 import { db } from "@/lib/firebase";
 import { getIdToken } from "@/lib/auth";
 import { Hunt, TacoSpot } from "@/lib/types";
@@ -255,31 +257,21 @@ export default function HuntPage({
       )}
 
       {/* Header */}
-      <header className="flex items-center justify-between px-4 md:px-8 py-3 border-b border-border shrink-0">
+      <header
+        className="flex items-center justify-between px-4 md:px-8 py-2 shrink-0"
+        style={{ background: "var(--surface)", borderBottom: "1px solid rgba(77,184,200,0.25)" }}
+      >
         <Link href="/">
-          <span
-            className="text-[12px] tracking-[0.2em] uppercase text-gold"
-            style={{ fontFamily: "var(--font-mono)" }}
-          >
-            Outer Rim
-          </span>
+          <Image
+            src="/images/taco.png"
+            alt="Outer Rim"
+            width={36}
+            height={36}
+            style={{ mixBlendMode: "screen" }}
+          />
         </Link>
-        <div className="flex items-center gap-3">
-          {participant ? (
-            <span
-              className="text-[12px] tracking-[0.15em] uppercase text-foreground"
-              style={{ fontFamily: "var(--font-mono)" }}
-            >
-              {Math.min(hunterClaimedCount, hunt.stops.length)}/{hunt.stops.length} claimed
-            </span>
-          ) : (
-            <span
-              className="text-[12px] tracking-[0.15em] uppercase text-foreground"
-              style={{ fontFamily: "var(--font-mono)" }}
-            >
-              {hunt.unlockedCount}/{hunt.stops.length} stops
-            </span>
-          )}
+
+        <div className="flex items-center gap-1">
           <button
             onClick={() => setShowLeaderboard((x) => !x)}
             className="min-w-[44px] min-h-[44px] flex items-center justify-center text-foreground-muted hover:text-gold transition-colors"
