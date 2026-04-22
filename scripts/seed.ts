@@ -63,23 +63,22 @@ async function seed() {
   // Create the initial hunt (Stop 1 unlocked, rest locked).
   // Guard: skip if the hunt already exists to avoid resetting an in-progress hunt.
   const stopIds = spots.map((s: { id: string }) => s.id);
+  const force = process.argv.includes("--force");
   const huntRef = db.collection("hunts").doc("may5-2026");
   const existingHunt = await huntRef.get();
-  if (existingHunt.exists) {
+  if (existingHunt.exists && !force) {
     console.log("⚠ Hunt 'may5-2026' already exists — skipping. Pass --force to overwrite.");
   } else {
     await huntRef.set({
       id: "may5-2026",
       stops: stopIds,
-      unlockedCount: 1,
-      pendingStop: null,
-      navigatorToken: null,
+      unlockedCount: stopIds.length,
       status: "active",
       createdAt: admin.firestore.FieldValue.serverTimestamp(),
     });
-    console.log("✓ Hunt 'may5-2026' created (Stop 1 unlocked)");
+    console.log(`✓ Hunt 'may5-2026' ${existingHunt.exists ? "reset" : "created"} (all ${stopIds.length} stops visible)`);
   }
-  console.log("\nReady. Run the app and visit /admin/trigger to generate the navigator URL.");
+  console.log("\nReady. Run the app and visit /hunt/may5-2026 to start hunting.");
   process.exit(0);
 }
 

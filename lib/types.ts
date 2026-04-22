@@ -14,12 +14,8 @@ export interface Hunt {
   id: string;
   /** Ordered tacoSpot IDs — array index = stop number */
   stops: string[];
-  /** stops[0..unlockedCount-1] are visible on the map */
+  /** Always equals stops.length — all stops visible from the start */
   unlockedCount: number;
-  /** Index of the stop currently awaiting unlock, or null */
-  pendingStop: number | null;
-  /** UUID that grants approve access via /hunt/[id]/unlock?token=... */
-  navigatorToken: string | null;
   status: "active" | "complete";
   trailCardUrl?: string;
   /** AI-generated clues keyed by tacoSpot ID — cached after first generation */
