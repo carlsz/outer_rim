@@ -74,10 +74,10 @@ export default function HuntPage({
 
   // Fetch and cache clue for the hunter's current active stop
   useEffect(() => {
-    if (!hunt) return;
+    if (!hunt || !uid) return;
     const activeIndex = participant
       ? participant.claimedSpots.length
-      : hunt.unlockedCount - 1;
+      : 0;
     const activeSpotId = hunt.stops[activeIndex];
     if (!activeSpotId) return;
     if (hunt.clues?.[activeSpotId]) return;
@@ -88,23 +88,26 @@ export default function HuntPage({
     if (!spot) return;
 
     setClueLoading(true);
-    fetch("/api/clue", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        huntId: id,
-        spotId: activeSpotId,
-        swAlias: spot.swAlias,
-        clueHint: spot.clueHint,
-      }),
-    })
-      .then((r) => {
+    const fetchClue = async () => {
+      try {
+        const token = await getIdToken();
+        const r = await fetch("/api/clue", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ huntId: id, spotId: activeSpotId }),
+        });
         if (!r.ok) throw new Error(`/api/clue ${r.status}`);
-        return r.json();
-      })
-      .catch((err) => console.error("[clue] fetch error:", err))
-      .finally(() => setClueLoading(false));
-  }, [hunt, id, participant?.claimedSpots.length]);
+      } catch (err) {
+        console.error("[clue] fetch error:", err);
+      } finally {
+        setClueLoading(false);
+      }
+    };
+    fetchClue();
+  }, [hunt, id, participant?.claimedSpots.length, uid]);
 
   async function claimStop(spotId: string) {
     if (!uid || claimLoading) return;
@@ -158,25 +161,16 @@ export default function HuntPage({
   }
 
   async function forceAdvance() {
-    if (!hunt || forceAdvancing || hunt.status === "complete") return;
+    if (!hunt || forceAdvancing || !uid) return;
+    const activeSpotId = hunt.stops[hunterActiveIndex];
+    if (!activeSpotId) return;
     setForceAdvancing(true);
     try {
-      // Advance the individual hunter's claimedSpots
-      const activeIndex = participant ? participant.claimedSpots.length : hunt.unlockedCount - 1;
-      const activeSpotId = hunt.stops[activeIndex];
-      if (activeSpotId && uid) {
-        const token = await getIdToken();
-        await fetch("/api/claim", {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ huntId: id, spotId: activeSpotId }),
-        });
-      }
-      // Also advance the global navigator panel
-      await fetch("/api/unlock", {
+      const token = await getIdToken();
+      await fetch("/api/claim", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ huntId: id, action: "force" }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ huntId: id, spotId: activeSpotId }),
       });
     } finally {
       setForceAdvancing(false);
@@ -218,9 +212,9 @@ export default function HuntPage({
     );
   }
 
-  // Per-hunter stop states — fall back to hunt.unlockedCount if no participant yet
+  // Per-hunter stop states — fall back to 0 if no participant yet (all stops visible from start)
   const hunterClaimedCount = participant?.claimedSpots.length ?? 0;
-  const hunterActiveIndex = participant ? hunterClaimedCount : hunt.unlockedCount - 1;
+  const hunterActiveIndex = participant ? hunterClaimedCount : 0;
   const hunterActiveSpotId = hunt.stops[hunterActiveIndex] ?? null;
   const hunterComplete = participant
     ? participant.claimedSpots.length >= hunt.stops.length
@@ -318,7 +312,7 @@ export default function HuntPage({
         onClose={() => setBypassOpen(false)}
         onAdvance={forceAdvance}
         advancing={forceAdvancing}
-        currentStop={hunt.unlockedCount}
+        currentStop={hunterActiveIndex + 1}
         totalStops={hunt.stops.length}
       />
       <InfoModal open={infoOpen} onClose={() => setInfoOpen(false)} />
@@ -358,24 +352,6 @@ export default function HuntPage({
           </div>
         );
       })()}
-
-      {/* Navigator pending unlock banner (guided mode only) */}
-      {hunt.pendingStop !== null && !participant && (
-        <div className="px-4 py-3 border-b border-gold/40 bg-gold/5 flex items-center gap-3">
-          <div className="w-2 h-2 rounded-full bg-gold pulse-ring shrink-0" />
-          <div className="flex-1 min-w-0">
-            <p
-              className="text-[12px] tracking-[0.15em] uppercase text-gold"
-              style={{ fontFamily: "var(--font-mono)" }}
-            >
-              Navigator unlock requested
-            </p>
-            <p className="text-[12px] text-foreground-muted">
-              Awaiting Imperial clearance for next stop…
-            </p>
-          </div>
-        </div>
-      )}
 
       {/* Hunter complete banner */}
       {hunterComplete && participant && (
