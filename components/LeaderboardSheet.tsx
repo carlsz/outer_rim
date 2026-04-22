@@ -37,33 +37,42 @@ export function LeaderboardSheet({ open, onClose, huntId, totalStops, currentUid
 
       {/* Sheet */}
       <div
-        className={`relative w-full md:max-w-[580px] md:mx-auto md:rounded-2xl bg-surface rounded-t-2xl px-6 pt-8 pb-10 transition-transform duration-300 ease-out max-h-[70vh] flex flex-col ${
+        className={`relative w-full md:max-w-[580px] md:mx-auto bg-surface rounded-t-[8px] px-5 pt-6 pb-10 transition-transform duration-300 ease-out max-h-[70vh] flex flex-col ${
           open ? "translate-y-0" : "translate-y-full"
         }`}
+        style={{ borderTop: "1px solid rgba(77,184,200,0.3)" }}
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-5 shrink-0">
-          <h2
-            className="text-[22px] font-bold text-foreground leading-none"
-            style={{ fontFamily: "Fraunces, serif" }}
-          >
-            Leaderboard
-          </h2>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col gap-0.5">
+            <h2
+              className="text-[20px] font-bold text-foreground leading-none"
+              style={{ fontFamily: "Fraunces, serif" }}
+            >
+              Leaderboard
+            </h2>
+            <p
+              className="text-[10px] tracking-[0.25em] uppercase text-cyan"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              Hunter Rankings
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
             <Link
               href={`/hunt/${huntId}/leaderboard`}
-              className="text-[12px] tracking-[0.12em] uppercase"
-              style={{ color: "var(--foreground-muted)", fontFamily: "var(--font-mono)" }}
+              className="text-[11px] tracking-[0.15em] uppercase transition-opacity hover:opacity-80"
+              style={{ color: "var(--accent-cyan)", fontFamily: "var(--font-mono)" }}
               onClick={onClose}
             >
               full view →
             </Link>
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-full text-foreground-muted hover:text-foreground transition-colors"
+              className="w-8 h-8 flex items-center justify-center text-foreground-muted hover:text-foreground transition-colors"
               aria-label="Close"
             >
-              <X size={18} />
+              <X size={16} />
             </button>
           </div>
         </div>

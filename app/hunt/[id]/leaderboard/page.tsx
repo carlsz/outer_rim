@@ -45,12 +45,20 @@ export default function LeaderboardPage({
 
       <div className="flex-1 overflow-y-auto px-4 py-6">
         <div className="max-w-[480px] mx-auto">
-          <h1
-            className="text-2xl mb-6"
-            style={{ color: "#e8dfc8", fontFamily: "Fraunces, serif" }}
-          >
-            Outer Rim — Hunter Rankings
-          </h1>
+          <div className="flex flex-col gap-1 mb-6">
+            <h1
+              className="text-[28px] font-bold text-foreground leading-none"
+              style={{ fontFamily: "Fraunces, serif" }}
+            >
+              Leaderboard
+            </h1>
+            <p
+              className="text-[10px] tracking-[0.25em] uppercase text-cyan"
+              style={{ fontFamily: "var(--font-mono)" }}
+            >
+              Hunter Rankings
+            </p>
+          </div>
 
           {hunt ? (
             <Leaderboard

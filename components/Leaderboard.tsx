@@ -25,67 +25,103 @@ export default function Leaderboard({ huntId, totalStops, currentUid }: Props) {
       orderBy("claimedCount", "desc"),
       orderBy("joinedAt", "asc")
     );
-
-    const unsub = onSnapshot(q, (snap) => {
-      setEntries(
-        snap.docs.map((d) => ({
-          uid: d.id,
-          participant: d.data() as Participant,
-        }))
-      );
+    return onSnapshot(q, (snap) => {
+      setEntries(snap.docs.map((d) => ({ uid: d.id, participant: d.data() as Participant })));
     });
-
-    return unsub;
   }, [huntId]);
 
   if (entries.length === 0) {
     return (
-      <p className="text-sm text-center py-4" style={{ color: "#6b7280", fontFamily: "DM Sans, sans-serif" }}>
-        No hunters yet — be the first!
+      <p
+        className="text-[12px] tracking-[0.15em] uppercase text-center py-6 text-foreground-muted"
+        style={{ fontFamily: "var(--font-mono)" }}
+      >
+        No hunters yet — be the first
       </p>
     );
   }
 
   return (
-    <ol className="space-y-2">
+    <ol className="flex flex-col gap-2">
       {entries.map((entry, i) => {
         const isMe = entry.uid === currentUid;
+        const complete = !!entry.participant.completedAt;
         const pct = totalStops > 0 ? (entry.participant.claimedCount / totalStops) * 100 : 0;
 
         return (
           <li
             key={entry.uid}
-            className="rounded px-3 py-2"
+            className="rounded-[3px] px-3 py-2.5 flex flex-col gap-2"
             style={{
-              background: isMe ? "rgba(201,168,76,0.12)" : "#1c2028",
-              border: isMe ? "1px solid rgba(201,168,76,0.4)" : "1px solid rgba(232,223,200,0.08)",
+              background: isMe ? "rgba(77,184,200,0.06)" : "var(--surface)",
+              border: isMe
+                ? "1px solid rgba(77,184,200,0.35)"
+                : "1px solid var(--border)",
             }}
           >
-            <div className="flex items-center justify-between mb-1">
-              <span
-                className="text-sm font-medium"
-                style={{ color: isMe ? "#c9a84c" : "#e8dfc8", fontFamily: "DM Sans, sans-serif" }}
-              >
-                #{i + 1} {entry.participant.name}
-                {isMe && <span className="ml-2 text-xs opacity-70">(you)</span>}
-              </span>
-              <span
-                className="text-xs"
-                style={{ color: "#6b7280", fontFamily: "DM Sans, sans-serif" }}
-              >
-                {entry.participant.claimedCount}/{totalStops}
-              </span>
+            <div className="flex items-center justify-between gap-3">
+              {/* Rank + name */}
+              <div className="flex items-center gap-2.5 min-w-0">
+                <span
+                  className="text-[11px] shrink-0 tabular-nums"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    color: isMe ? "var(--accent-cyan)" : "var(--foreground-muted)",
+                  }}
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className="text-[13px] truncate"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    color: isMe ? "var(--accent-cyan)" : "var(--foreground)",
+                    fontWeight: isMe ? 500 : 400,
+                  }}
+                >
+                  {entry.participant.name}
+                  {isMe && (
+                    <span
+                      className="ml-2 text-[10px] tracking-[0.15em] uppercase opacity-60"
+                    >
+                      you
+                    </span>
+                  )}
+                </span>
+              </div>
+
+              {/* Count + complete badge */}
+              <div className="flex items-center gap-2 shrink-0">
+                {complete && (
+                  <span
+                    className="text-[10px] tracking-[0.12em] uppercase"
+                    style={{ fontFamily: "var(--font-mono)", color: "var(--accent-gold)" }}
+                  >
+                    ✓
+                  </span>
+                )}
+                <span
+                  className="text-[11px] tabular-nums"
+                  style={{
+                    fontFamily: "var(--font-mono)",
+                    color: complete ? "var(--accent-gold)" : "var(--foreground-muted)",
+                  }}
+                >
+                  {entry.participant.claimedCount}/{totalStops}
+                </span>
+              </div>
             </div>
 
+            {/* Progress bar */}
             <div
-              className="h-1 rounded-full overflow-hidden"
-              style={{ background: "rgba(232,223,200,0.08)" }}
+              className="w-full h-[2px] rounded-full overflow-hidden"
+              style={{ background: "var(--border)" }}
             >
               <div
-                className="h-full rounded-full transition-all duration-500"
+                className="h-full rounded-full transition-all duration-500 ease-out"
                 style={{
                   width: `${pct}%`,
-                  background: entry.participant.completedAt ? "#4ade80" : "#c9a84c",
+                  background: complete ? "var(--accent-gold)" : "var(--accent-cyan)",
                 }}
               />
             </div>
