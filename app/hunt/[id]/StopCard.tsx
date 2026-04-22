@@ -81,7 +81,7 @@ export function StopCard({
     onDecoded?.();
   }
 
-  const borderColor = isActive && decoded ? "border-cyan" : isActive ? "border-gold" : isCompleted ? "border-success" : "border-border";
+  const borderColor = isActive ? "border-cyan" : isCompleted ? "border-success" : "border-border";
   const cardClass = `rounded-[5px] border bg-surface p-4 ${borderColor} ${
     isLocked ? "opacity-80" : isCompleted ? "opacity-60" : ""
   } ${isActive && !decoded ? "pulse-ring" : ""}`;
@@ -136,7 +136,7 @@ export function StopCard({
             )}
             {isActive && (
               <span
-                className="text-[12px] tracking-[0.15em] uppercase text-gold"
+                className="text-[12px] tracking-[0.15em] uppercase text-cyan"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 active
@@ -185,7 +185,7 @@ export function StopCard({
               <span
                 key={i}
                 className={`text-[14px] ${
-                  i < spot.spiceRating ? "text-gold" : "text-foreground-muted opacity-30"
+                  i < spot.spiceRating ? "text-cyan" : "text-foreground-muted opacity-30"
                 }`}
               >
                 ●
@@ -225,7 +225,7 @@ export function StopCard({
               className="mt-3 w-full flex items-center justify-center gap-2 py-3 rounded-[3px] text-[12px] tracking-[0.2em] uppercase hover:opacity-80 active:opacity-60"
               style={{
                 fontFamily: "var(--font-mono)",
-                color: "var(--accent-gold)",
+                color: "var(--accent-cyan)",
                 border: "1px solid var(--border-strong)",
                 background: "var(--surface-elevated)",
                 opacity: decoded ? 0 : 1,
@@ -276,7 +276,7 @@ export function StopCard({
             className="text-[12px] font-mono tracking-widest uppercase px-3 py-2 rounded-[3px] text-center transition-opacity hover:opacity-80"
             style={{
               background: "var(--surface-elevated)",
-              color: "var(--accent-gold)",
+              color: "var(--accent-cyan)",
               border: "1px solid var(--border-strong)",
             }}
           >
@@ -362,7 +362,7 @@ export function StopCard({
                 className="text-[12px] font-mono tracking-widest uppercase px-3 py-2 rounded-[3px] text-center transition-opacity hover:opacity-80"
                 style={{
                   background: "var(--surface-elevated)",
-                  color: "var(--accent-gold)",
+                  color: "var(--accent-cyan)",
                   border: "1px solid var(--border-strong)",
                 }}
               >

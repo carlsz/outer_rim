@@ -67,7 +67,7 @@ export default async function HunterCrawlPage({
       <header className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
         <Link href={`/hunt/${huntId}`}>
           <span
-            className="text-[12px] tracking-[0.2em] uppercase text-gold"
+            className="text-[12px] tracking-[0.2em] uppercase text-cyan"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             ← Hunt
@@ -97,7 +97,7 @@ export default async function HunterCrawlPage({
         <div className="flex flex-col gap-1">
           <p
             className="text-[12px] tracking-[0.2em] uppercase"
-            style={{ fontFamily: "var(--font-mono)", color: "#c9a84c" }}
+            style={{ fontFamily: "var(--font-mono)", color: "var(--accent-cyan)" }}
           >
             Hunter
           </p>
@@ -113,7 +113,7 @@ export default async function HunterCrawlPage({
             </p>
           ) : (
             <p
-              className="text-[12px] tracking-[0.2em] uppercase text-gold"
+              className="text-[12px] tracking-[0.2em] uppercase text-foreground-muted"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               {participant.claimedCount} of {huntData.stops.length} stops claimed

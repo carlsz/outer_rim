@@ -193,7 +193,7 @@ export default function HuntPage({
           <code className="text-cyan">npm run seed</code> to initialize the hunt
           in Firestore.
         </p>
-        <Link href="/" className="text-[13px] text-gold underline">
+        <Link href="/" className="text-[13px] text-cyan underline">
           Return to base
         </Link>
       </div>
@@ -203,7 +203,7 @@ export default function HuntPage({
   if (!hunt || authLoading) {
     return (
       <div className="flex flex-col min-h-screen items-center justify-center gap-3">
-        <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+        <div className="w-5 h-5 border-2 border-cyan border-t-transparent rounded-full animate-spin" />
         <p
           className="text-[12px] tracking-[0.2em] uppercase text-foreground-muted"
           style={{ fontFamily: "var(--font-mono)" }}
@@ -274,7 +274,7 @@ export default function HuntPage({
         <div className="flex items-center gap-1">
           <button
             onClick={() => setShowLeaderboard((x) => !x)}
-            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-foreground-muted hover:text-gold transition-colors"
+            className="min-w-[44px] min-h-[44px] flex items-center justify-center text-foreground-muted hover:text-cyan transition-colors"
             aria-label="Leaderboard"
           >
             <Trophy size={16} />
@@ -382,7 +382,7 @@ export default function HuntPage({
           style={{
             fontFamily: "var(--font-mono)",
             background: "rgba(10,11,13,0.72)",
-            color: "var(--accent-gold)",
+            color: "var(--accent-cyan)",
             border: "1px solid var(--border-strong)",
             backdropFilter: "blur(6px)",
           }}

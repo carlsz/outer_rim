@@ -38,7 +38,7 @@ export function ClueTerminal({ clue, loading, decoded, onTransmissionDecoded }: 
         ? "Decoding transmission…"
         : "Transmission decoded";
 
-  const labelColor = decoded ? "var(--accent-cyan)" : "var(--accent-gold)";
+  const labelColor = decoded ? "var(--accent-cyan)" : "var(--foreground-muted)";
 
   return (
     <div

@@ -117,7 +117,7 @@ export default function Home() {
               {heroTitle}
             </h1>
             <p
-              className="text-[18px] font-light italic text-gold"
+              className="text-[18px] font-light italic text-foreground-muted"
               style={{ fontFamily: "Fraunces, serif", minHeight: "1.4em" }}
             >
               {subtitle}
@@ -141,7 +141,7 @@ export default function Home() {
               <p
                 className="text-[12px] tracking-[0.2em] uppercase transition-all duration-200"
                 style={{
-                  color: "var(--accent-gold)",
+                  color: "var(--foreground-muted)",
                   opacity: bootLine1 ? 1 : 0,
                   transform: bootLine1 ? "translateX(0)" : "translateX(-8px)",
                 }}
@@ -151,7 +151,7 @@ export default function Home() {
               <p
                 className="text-[12px] tracking-[0.2em] uppercase transition-all duration-200"
                 style={{
-                  color: "var(--accent-gold)",
+                  color: "var(--foreground-muted)",
                   opacity: bootLine2 ? 1 : 0,
                   transform: bootLine2 ? "translateX(0)" : "translateX(-8px)",
                 }}

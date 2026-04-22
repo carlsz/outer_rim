@@ -29,7 +29,7 @@ export default function CrawlPage({
   if (!hunt) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+        <div className="w-5 h-5 border-2 border-cyan border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
@@ -63,7 +63,7 @@ export default function CrawlPage({
       <header className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
         <Link href={`/hunt/${id}`}>
           <span
-            className="text-[12px] tracking-[0.2em] uppercase text-gold"
+            className="text-[12px] tracking-[0.2em] uppercase text-cyan"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             ← Hunt
@@ -100,7 +100,7 @@ export default function CrawlPage({
             </p>
           ) : (
             <p
-              className="text-[12px] tracking-[0.2em] uppercase text-gold"
+              className="text-[12px] tracking-[0.2em] uppercase text-foreground-muted"
               style={{ fontFamily: "var(--font-mono)" }}
             >
               Hunt in progress

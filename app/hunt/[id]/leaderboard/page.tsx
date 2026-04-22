@@ -29,7 +29,7 @@ export default function LeaderboardPage({
       <header className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
         <Link href={`/hunt/${id}`}>
           <span
-            className="text-[12px] tracking-[0.2em] uppercase text-gold"
+            className="text-[12px] tracking-[0.2em] uppercase text-cyan"
             style={{ fontFamily: "var(--font-mono)" }}
           >
             ← Back to Hunt
@@ -60,7 +60,7 @@ export default function LeaderboardPage({
             />
           ) : (
             <div className="flex justify-center py-8">
-              <div className="w-5 h-5 border-2 border-gold border-t-transparent rounded-full animate-spin" />
+              <div className="w-5 h-5 border-2 border-cyan border-t-transparent rounded-full animate-spin" />
             </div>
           )}
         </div>

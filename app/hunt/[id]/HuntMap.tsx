@@ -5,9 +5,9 @@ import { useEffect, useRef } from "react";
 import { TacoSpot } from "@/lib/types";
 
 function makePinSvg(active: boolean) {
-  const color = active ? "#c9a84c" : "#6b7280";
-  const glow = active ? `filter: drop-shadow(0 0 6px rgba(201,168,76,0.8));` : "";
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32" style="${glow}"><path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20S24 21 24 12C24 5.373 18.627 0 12 0z" fill="${color}"/><circle cx="12" cy="12" r="5" fill="#0a0b0d"/></svg>`;
+  const color = active ? "#4db8c8" : "#6b7280";
+  const glow = active ? `filter: drop-shadow(0 0 6px rgba(77,184,200,0.8));` : "";
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32" style="${glow}"><path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 20 12 20S24 21 24 12C24 5.373 18.627 0 12 0z" fill="${color}"/><circle cx="12" cy="12" r="5" fill="#04070f"/></svg>`;
 }
 
 interface HuntMapProps {
@@ -78,7 +78,7 @@ export function HuntMap({ spots, activeSpotId }: HuntMapProps) {
       polylineRef.current = new google.maps.Polyline({
         path,
         geodesic: false,
-        strokeColor: "#c9a84c",
+        strokeColor: "#4db8c8",
         strokeOpacity: 0,
         icons: [
           {
@@ -86,7 +86,7 @@ export function HuntMap({ spots, activeSpotId }: HuntMapProps) {
               path: "M 0,-1 0,1",
               strokeOpacity: 0.7,
               scale: 3,
-              strokeColor: "#c9a84c",
+              strokeColor: "#4db8c8",
             },
             offset: "0",
             repeat: "16px",

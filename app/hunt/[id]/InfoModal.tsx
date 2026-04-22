@@ -82,7 +82,7 @@ export function InfoModal({
           {STEPS.map((step) => (
             <li key={step.n} className="flex gap-4 items-start">
               <span
-                className="text-[12px] tracking-[0.2em] text-gold shrink-0 pt-[3px]"
+                className="text-[12px] tracking-[0.2em] text-cyan shrink-0 pt-[3px]"
                 style={{ fontFamily: "var(--font-mono)" }}
               >
                 {step.n}

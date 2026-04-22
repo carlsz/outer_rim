@@ -2,17 +2,19 @@
 
 :root {
   /* Design system tokens — matches DESIGN.md exactly */
-  --background: #0a0b0d;
-  --surface: #12151a;
-  --surface-elevated: #1c2028;
-  --foreground: #e8dfc8;
-  --foreground-muted: #878e9d; /* was #6b7280; ~6.0:1 on #0a0b0d, clears WCAG AA */
-  --accent-gold: #c9a84c;
-  --accent-cyan: #4db8c8;
-  --accent-red: #ef4444;
+  --background: #04070f;       /* Void Blue — deep navy-black */
+  --surface: #060d1a;          /* Tactical Dark */
+  --surface-elevated: #0a1628; /* Surface Raised */
+  --foreground: #d4ecf0;       /* Holo White — cool blue-tinted */
+  --foreground-muted: #5a8a9a; /* Faded Signal */
+  --accent-gold: #c9a84c;      /* Republic Gold — achievement only */
+  --accent-cyan: #4db8c8;      /* Hologram Cyan — primary accent */
+  --accent-signal: #7dd4e0;    /* Signal Blue — hover/glow states */
+  --accent-red: #c84d4d;       /* Imperial Red */
+  --grid-structural: #1a3a4a;  /* Grid/border base */
   --success: #4ade80;
-  --border: rgba(232, 223, 200, 0.08);
-  --border-strong: rgba(232, 223, 200, 0.16);
+  --border: rgba(77, 184, 200, 0.12);
+  --border-strong: rgba(77, 184, 200, 0.25);
 }
 
 @theme inline {
@@ -23,7 +25,9 @@
   --color-foreground-muted: var(--foreground-muted);
   --color-gold: var(--accent-gold);
   --color-cyan: var(--accent-cyan);
+  --color-signal: var(--accent-signal);
   --color-imperial: var(--accent-red);
+  --color-grid: var(--grid-structural);
   --color-success: var(--success);
   --color-border: var(--border);
   --color-border-strong: var(--border-strong);
@@ -56,8 +60,8 @@ body::before {
 
 /* Pulsing amber ring for pending unlock */
 @keyframes pulse-ring {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(201, 168, 76, 0.6); }
-  50% { box-shadow: 0 0 0 12px rgba(201, 168, 76, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(77, 184, 200, 0.5); }
+  50% { box-shadow: 0 0 0 12px rgba(77, 184, 200, 0); }
 }
 
 .pulse-ring {
