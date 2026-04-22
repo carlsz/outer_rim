@@ -348,7 +348,13 @@ export default function HuntPage({
       {/* Hunter complete banner */}
       {hunterComplete && participant && (
         <div className="px-4 py-3 border-b border-success/40 bg-success/5 flex items-center gap-3">
-          <span className="text-success text-lg">✓</span>
+          <Image
+            src="/images/medal.png"
+            alt="Mission complete"
+            width={48}
+            height={48}
+            style={{ mixBlendMode: "screen" }}
+          />
           <div className="flex-1 min-w-0">
             <p
               className="text-[12px] tracking-[0.15em] uppercase text-success"
