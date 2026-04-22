@@ -298,9 +298,9 @@ export function StopCard({
             className="w-full py-2.5 rounded-[3px] text-[12px] tracking-[0.2em] uppercase font-medium transition-opacity disabled:opacity-50 active:opacity-70"
             style={{
               fontFamily: "var(--font-mono)",
-              background: "#4ade80",
-              color: "#0a0b0d",
-              border: "none",
+              backgroundColor: "transparent",
+              border: "1px solid var(--accent-cyan)",
+              color: "var(--accent-cyan)",
             }}
           >
             {claimLoading ? "Verifying location…" : "✓ I'm here — Claim this stop"}

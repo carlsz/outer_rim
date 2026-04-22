@@ -129,7 +129,7 @@ export default function Home() {
         <div
           className="w-full rounded-[3px] border bg-background px-4 py-4 text-left transition-all duration-400"
           style={{
-            borderColor: "var(--border-strong)",
+            borderColor: stage === "cta" ? "var(--accent-cyan)" : "var(--border-strong)",
             fontFamily: "var(--font-mono)",
             opacity: terminalVisible ? 1 : 0,
             transform: terminalVisible ? "translateY(0)" : "translateY(4px)",
