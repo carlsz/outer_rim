@@ -13,12 +13,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.90.0",
+    "@anthropic-ai/sdk": "^0.91.1",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@resvg/resvg-js": "^2.6.2",
     "firebase": "^12.12.1",
     "firebase-admin": "^13.8.0",
-    "lucide-react": "^1.8.0",
+    "lucide-react": "^1.11.0",
     "next": "16.2.4",
     "qrcode": "^1.5.4",
     "react": "19.2.5",
